@@ -849,6 +849,14 @@ async function handleAuth() {
     } else {
       result = await supabase.auth.signUp({ email, password });
       if (result.error) throw result.error;
+      // If session returned, email confirm is off — user is already logged in
+      if (result.data.session) {
+        onAuthSuccess(result.data.user);
+        document.getElementById('auth-loading').style.display = 'none';
+        document.getElementById('auth-main-btn').disabled = false;
+        return;
+      }
+      // Otherwise email confirmation is required
       document.getElementById('auth-success').textContent = 'Account created! Check your email to confirm, then sign in.';
       document.getElementById('auth-success').style.display = 'block';
       document.getElementById('auth-loading').style.display = 'none';
