@@ -24,7 +24,7 @@ if (!window.supabase) {
     showAuthError('Auth library failed to load. Please disable ad blockers or try a different browser.');
   });
 }
-const supabase = window.supabase?.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+var supabase = window.supabase?.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ═══════════════════════════
 //  AUTH FUNCTIONS
