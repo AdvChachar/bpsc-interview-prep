@@ -75,6 +75,17 @@
   </div>
 </div>
 
+<!-- NAV USER — always visible when logged in (outside #app so it shows on landing page too) -->
+<div class="top-nav" id="top-nav" style="display:none">
+  <div class="nav-inner">
+    <div class="nav-logo">BPSC Prep · Mr. Chachar</div>
+    <div class="nav-user" id="nav-user">
+      <span class="nav-user-email" id="nav-email"></span>
+      <button class="nav-user-btn" onclick="handleSignOut()">Sign out</button>
+    </div>
+  </div>
+</div>
+
 <!-- APP SHELL -->
 <div id="app">
   <div class="top-nav">
@@ -91,10 +102,6 @@
         <button class="nav-tab" data-section="s8">08·D-Day</button>
       </div>
       <div class="nav-timer" id="session-timer">⏱ 2:45:00</div>
-      <div class="nav-user" id="nav-user">
-        <span class="nav-user-email" id="nav-email"></span>
-        <button class="nav-user-btn" onclick="handleSignOut()">Sign out</button>
-      </div>
     </div>
   </div>
   <div class="content">

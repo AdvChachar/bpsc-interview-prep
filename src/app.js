@@ -125,6 +125,7 @@ async function handleSignOut() {
   document.getElementById('auth-section').style.display = 'flex';
   document.getElementById('landing').style.display = 'none';
   document.getElementById('app').style.display = 'none';
+  document.getElementById('top-nav').style.display = 'none';
   document.getElementById('nav-user').style.display = 'none';
 }
 
@@ -138,6 +139,7 @@ async function onAuthSuccess(user) {
   currentUser = user;
   document.getElementById('auth-section').style.display = 'none';
   document.getElementById('landing').style.display = 'flex';
+  document.getElementById('top-nav').style.display = 'block';
   document.getElementById('nav-user').style.display = 'flex';
   document.getElementById('nav-email').textContent = user.email;
   await loadUserData();
@@ -998,6 +1000,7 @@ if (supabase) {
       document.getElementById('auth-section').style.display = 'flex';
       document.getElementById('landing').style.display = 'none';
       document.getElementById('app').style.display = 'none';
+      document.getElementById('top-nav').style.display = 'none';
       document.getElementById('nav-user').style.display = 'none';
     }
   });
