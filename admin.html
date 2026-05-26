@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BPSC Admin Panel — Mr. Chachar</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--gold:#c9a84c;--gold-l:#e8c96a;--navy:#0b1437;--navy4:#1a2878;--em:#1a6b3c;--dark:#070c20;--dark2:#0a1028;--dark3:#0f1535;--dark4:#161e40;--border:rgba(201,168,76,0.1);--border2:rgba(201,168,76,0.2);--text:#f0eeee;--text2:#b8b8d0;--text3:#8080a0;--card:#0d1330;--danger:#ef4444;--em-l:#27a05a}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);min-height:100vh}
+/* AUTH */
+#auth-section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
+.auth-card{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:2.5rem 2rem;max-width:420px;width:100%}
+.auth-card h2{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--text);margin-bottom:.5rem}
+.auth-card p{font-size:13px;color:var(--text2);margin-bottom:1.5rem;line-height:1.6}
+.auth-field{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:9px;padding:11px 14px;font-size:14px;color:var(--text);outline:none;margin-bottom:10px}
+.auth-field:focus{border-color:var(--gold)}
+.auth-btn{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(201,168,76,0.35);font-size:14px;font-weight:600;cursor:pointer;margin-bottom:8px}
+.auth-btn.primary{background:linear-gradient(135deg,var(--navy4),var(--em));color:var(--gold-l)}
+.auth-error{font-size:12px;color:var(--danger);display:none;text-align:center;margin-bottom:8px}
+.auth-loading{display:none;text-align:center;font-size:13px;color:var(--gold)}
+/* LAYOUT */
+#admin-app{display:none;min-height:100vh}
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(7,12,32,.95);backdrop-filter:blur(24px);border-bottom:1px solid var(--border2);padding:.65rem 1.5rem;display:flex;align-items:center;gap:12px}
+.nav-logo{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;background:linear-gradient(135deg,var(--gold-l),var(--em-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-title{font-size:15px;font-weight:600;color:var(--text);margin-right:auto}
+.nav-email{font-size:11px;color:var(--text3)}.nav-btn{padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;cursor:pointer}
+.nav-btn:hover{color:var(--text);border-color:var(--border2)}
+.content{max-width:1200px;margin:0 auto;padding:1.5rem}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:1.5rem}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.25rem}
+.stat-num{font-family:'JetBrains Mono',monospace;font-size:1.8rem;font-weight:600;color:var(--gold-l)}
+.stat-label{font-size:12px;color:var(--text3);margin-top:4px}
+/* TABLE */
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1rem;align-items:center}
+.search-input{flex:1;min-width:200px;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:9px;padding:10px 14px;font-size:13px;color:var(--text);outline:none}
+.search-input:focus{border-color:var(--gold)}
+.toolbar .auth-btn{width:auto;padding:10px 20px;margin:0}
+.table-wrap{overflow-x:auto;background:var(--card);border:1px solid var(--border);border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{padding:12px 14px;text-align:left;color:var(--text3);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02)}
+td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--text2)}
+tr:hover td{background:rgba(201,168,76,0.04)}
+tr:last-child td{border-bottom:none}
+.user-link{color:var(--gold-l);cursor:pointer;font-weight:500}
+.user-link:hover{text-decoration:underline}
+.progress-bar-bg{width:100px;height:5px;background:rgba(255,255,255,0.06);border-radius:5px;display:inline-block;vertical-align:middle;margin-right:8px}
+.progress-bar-fill{height:5px;border-radius:5px;background:linear-gradient(90deg,var(--navy4),var(--gold))}
+.badge-admin{padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600;background:rgba(201,168,76,0.15);color:var(--gold);border:1px solid rgba(201,168,76,0.25)}
+.badge-active{padding:2px 8px;border-radius:100px;font-size:10px;font-weight:600;background:rgba(39,160,90,0.15);color:var(--em-l);border:1px solid rgba(39,160,90,0.25)}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:1.5rem}
+.modal-overlay.show{display:flex}
+.modal{background:var(--dark3);border:1px solid var(--border2);border-radius:18px;max-width:680px;width:100%;max-height:85vh;overflow-y:auto;padding:1.5rem}
+.modal h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--text);margin-bottom:.5rem}
+.modal-close{float:right;background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer}
+.modal-close:hover{color:var(--text)}
+.modal-section{margin:1rem 0;padding:1rem;background:rgba(255,255,255,0.03);border-radius:10px}
+.modal-section h4{font-size:12px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.6rem}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.modal-field{font-size:12px;color:var(--text2);line-height:1.7}
+.modal-field strong{color:var(--text)}.modal-field span{color:var(--gold-l)}
+.mock-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.mock-row:last-child{border:none}
+.mock-q{color:var(--text2);flex:1;margin-right:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mock-score{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;flex-shrink:0}
+.mock-ans-toggle{color:var(--gold-l);font-size:11px;cursor:pointer;flex-shrink:0;margin-left:8px}
+.mock-answer-text{display:none;font-size:12px;color:var(--text2);padding:8px;background:rgba(255,255,255,0.03);border-radius:6px;margin-top:6px;white-space:pre-wrap}
+.mock-answer-text.show{display:block}
+@media(max-width:600px){.modal-grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="auth-section">
+  <div class="auth-card">
+    <h2>🔐 Admin Access</h2>
+    <p>Sign in with your admin account to manage the BPSC Interview Prep platform.</p>
+    <div id="auth-error" class="auth-error"></div>
+    <input type="email" id="auth-email" class="auth-field" placeholder="Email address" autocomplete="email">
+    <input type="password" id="auth-password" class="auth-field" placeholder="Password" autocomplete="current-password">
+    <button class="auth-btn primary" id="auth-btn" onclick="handleAdminLogin()">Sign In</button>
+    <div id="auth-loading" class="auth-loading">Please wait...</div>
+  </div>
+</div>
+
+<div id="admin-app">
+  <div class="top-nav">
+    <span class="nav-logo">BPSC</span>
+    <span class="nav-title">Admin Panel</span>
+    <span class="nav-email" id="nav-email"></span>
+    <a href="/" style="text-decoration:none"><button class="nav-btn">View Site</button></a>
+    <button class="nav-btn" onclick="handleAdminSignOut()">Sign out</button>
+  </div>
+  <div class="content">
+    <div class="stats-grid" id="stats-grid"></div>
+    <div class="toolbar">
+      <input type="text" class="search-input" id="search-input" placeholder="Search by name, email, degree, or post..." oninput="renderUsersTable()">
+      <button class="auth-btn primary" onclick="loadAllData()" style="width:auto;padding:10px 20px;margin:0">🔄 Refresh</button>
+    </div>
+    <div class="table-wrap"><table><thead><tr>
+      <th>Name</th><th>Email</th><th>Degree</th><th>Post</th><th>Progress</th><th>Mock Avg</th><th>Role</th>
+    </tr></thead><tbody id="users-tbody"></tbody></table></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="user-modal"><div class="modal">
+  <button class="modal-close" onclick="closeModal()">✕</button>
+  <h3 id="modal-name">User Details</h3>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:1rem" id="modal-email"></p>
+  <div class="modal-section"><h4>Profile</h4><div class="modal-grid" id="modal-profile"></div></div>
+  <div class="modal-section"><h4>Module Progress</h4><div id="modal-progress"></div></div>
+  <div class="modal-section"><h4>Mock Interview Results</h4><div id="modal-mocks"></div></div>
+  <div class="modal-section"><h4>Checklist</h4><div id="modal-checklist"></div></div>
+</div></div>
+
+<script>
+const supabase = createClient('https://dahuobhikjudonbwoagp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhaHVvYmhpa2p1ZG9uYndvYWdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDQ2NTQsImV4cCI6MjA5NTM4MDY1NH0.SAwnUA7oTO4lcd-HaE4jXJxeKDvNKu8hkVh9ZHI8YyQ');
+
+let allProfiles = [];
+let allMockResults = [];
+let currentUser = null;
+const secTotals = {1:6,2:8,3:12,4:10,5:10};
+const secNames = {1:'Intro',2:'Degree',3:'History',4:'Islamic Studies',5:'Current Affairs'};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session?.user) await onAuth(session.user);
+});
+
+async function handleAdminLogin() {
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value.trim();
+  if (!email || !password) { showErr('Enter email and password.'); return; }
+  document.getElementById('auth-loading').style.display = 'block';
+  document.getElementById('auth-btn').disabled = true;
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    await onAuth(data.user);
+  } catch (err) { showErr(err.message); }
+  document.getElementById('auth-loading').style.display = 'none';
+  document.getElementById('auth-btn').disabled = false;
+}
+
+async function onAuth(user) {
+  const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single();
+  if (!profile?.is_admin) { showErr('Access denied. Admin privileges required.'); return; }
+  currentUser = user;
+  document.getElementById('auth-section').style.display = 'none';
+  document.getElementById('admin-app').style.display = 'block';
+  document.getElementById('nav-email').textContent = user.email;
+  await loadAllData();
+}
+
+async function loadAllData() {
+  const [profilesRes, mocksRes] = await Promise.all([
+    supabase.from('profiles').select('*').order('updated_at', { ascending: false }),
+    supabase.from('mock_results').select('*')
+  ]);
+  allProfiles = profilesRes.data || [];
+  allMockResults = mocksRes.data || [];
+  renderStats();
+  renderUsersTable();
+}
+
+function renderStats() {
+  const total = allProfiles.length;
+  const withProgress = allProfiles.filter(p => p.progress && Object.values(p.progress).some(v => v?.length > 0)).length;
+  const mockScores = allMockResults.filter(r => r.score != null).map(r => r.score);
+  const avgScore = mockScores.length ? Math.round(mockScores.reduce((a,b)=>a+b,0)/mockScores.length) : 0;
+  const questionsAnswered = allMockResults.filter(r => r.answer).length;
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">Total Users</div></div>
+    <div class="stat-card"><div class="stat-num">${withProgress}</div><div class="stat-label">Active Users (with progress)</div></div>
+    <div class="stat-card"><div class="stat-num">${avgScore}%</div><div class="stat-label">Avg Mock Score</div></div>
+    <div class="stat-card"><div class="stat-num">${questionsAnswered}</div><div class="stat-label">Mock Answers Submitted</div></div>`;
+}
+
+function renderUsersTable() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const filtered = allProfiles.filter(p => {
+    const e = (p.name||'') + (p.degree||'') + (p.post||'') + (p.district||'');
+    return e.toLowerCase().includes(q);
+  });
+  let html = '';
+  filtered.forEach(p => {
+    const progressArr = p.progress ? Object.values(p.progress).filter(v => Array.isArray(v)) : [];
+    const seen = progressArr.reduce((s,v) => s + v.length, 0);
+    const total = Object.keys(secTotals).reduce((s,k) => s + secTotals[k], 0);
+    const pct = total ? Math.round(seen/total*100) : 0;
+    const userMocks = allMockResults.filter(r => r.user_id === p.id && r.score != null);
+    const avg = userMocks.length ? Math.round(userMocks.reduce((a,b)=>a+b.score,0)/userMocks.length) + '%' : '—';
+    html += `<tr>
+      <td><span class="user-link" onclick="openUserModal('${p.id}')">${p.name || '—'}</span></td>
+      <td style="font-size:12px;color:var(--text3)">${p.id === currentUser?.id ? 'you@' : ''}${p.id.substring(0,8)}…</td>
+      <td>${p.degree || '—'}</td>
+      <td>${p.post || '—'}</td>
+      <td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>${pct}%</td>
+      <td style="color:${avg !== '—' ? 'var(--em-l)' : 'var(--text3)'}">${avg}</td>
+      <td>${p.is_admin ? '<span class="badge-admin">Admin</span>' : '<span class="badge-active">User</span>'}</td>
+    </tr>`;
+  });
+  document.getElementById('users-tbody').innerHTML = html || '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text3)">No users found</td></tr>';
+}
+
+async function openUserModal(userId) {
+  const { data: profile } = await supabase.from('profiles').select('*').eq('id', userId).single();
+  if (!profile) return;
+  const userMocks = allMockResults.filter(r => r.user_id === userId);
+  const { data: authUser } = await supabase.auth.admin.getUserById(userId).catch(() => ({}));
+  const email = authUser?.user?.email || userId.substring(0,12) + '…';
+
+  document.getElementById('modal-name').textContent = profile.name || 'Unnamed User';
+  document.getElementById('modal-email').textContent = email;
+
+  document.getElementById('modal-profile').innerHTML = `
+    <div class="modal-field"><strong>Name:</strong> <span>${profile.name || '—'}</span></div>
+    <div class="modal-field"><strong>Degree:</strong> <span>${profile.degree || '—'}</span></div>
+    <div class="modal-field"><strong>University:</strong> <span>${profile.university || '—'}</span></div>
+    <div class="modal-field"><strong>Post:</strong> <span>${profile.post || '—'}</span></div>
+    <div class="modal-field"><strong>District:</strong> <span>${profile.district || '—'}</span></div>
+    <div class="modal-field"><strong>Admin:</strong> <span>${profile.is_admin ? 'Yes' : 'No'}</span></div>`;
+
+  let progressHtml = '';
+  Object.keys(secTotals).forEach(k => {
+    const seen = (profile.progress?.[k] || []).length;
+    const total = secTotals[k];
+    const pct = total ? Math.round(seen/total*100) : 0;
+    progressHtml += `<div class="mock-row"><span class="mock-q">${secNames[k] || 'Module '+k}</span><span style="color:var(--text2)">${seen}/${total}</span><span class="mock-score" style="color:${pct>=80?'var(--em-l)':pct>=50?'var(--gold)':'var(--text3)'}">${pct}%</span></div>`;
+  });
+  document.getElementById('modal-progress').innerHTML = progressHtml || '<div style="font-size:12px;color:var(--text3)">No progress data</div>';
+
+  let mocksHtml = '';
+  if (userMocks.length) {
+    userMocks.sort((a,b) => a.question_index - b.question_index).forEach(r => {
+      mocksHtml += `<div class="mock-row">
+        <span class="mock-q">Q${r.question_index+1}</span>
+        <span class="mock-score" style="color:${r.score>=80?'var(--em-l)':r.score>=60?'var(--gold)':'var(--danger)'}">${r.score || '—'}%</span>
+        <span class="mock-ans-toggle" onclick="this.nextElementSibling.classList.toggle('show')">View</span>
+        <div class="mock-answer-text">${r.answer || 'No answer'}</div>
+      </div>`;
+    });
+  } else {
+    mocksHtml = '<div style="font-size:12px;color:var(--text3)">No mock answers submitted</div>';
+  }
+  document.getElementById('modal-mocks').innerHTML = mocksHtml;
+
+  const ck = profile.checklist || [];
+  const checklistLabels = ['Read 5 modules','Intro mirror 5×','Memorize Cheat Sheet','Prepare outfit','Sleep 7+ hours','Morning re-read','3 deep breaths'];
+  document.getElementById('modal-checklist').innerHTML = ck.length
+    ? checklistLabels.map((l,i) => `<div class="mock-row"><span class="mock-q">${l}</span><span style="color:${ck[i]?'var(--em-l)':'var(--text3)'}">${ck[i]?'✅ Done':'❌ Pending'}</span></div>`).join('')
+    : '<div style="font-size:12px;color:var(--text3)">No checklist data</div>';
+
+  document.getElementById('user-modal').classList.add('show');
+}
+
+function closeModal() { document.getElementById('user-modal').classList.remove('show'); }
+
+async function handleAdminSignOut() {
+  await supabase.auth.signOut();
+  currentUser = null;
+  document.getElementById('auth-section').style.display = 'flex';
+  document.getElementById('admin-app').style.display = 'none';
+}
+
+function showErr(msg) {
+  const el = document.getElementById('auth-error');
+  el.textContent = msg; el.style.display = 'block';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
