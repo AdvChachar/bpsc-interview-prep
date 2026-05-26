@@ -6,6 +6,7 @@
 <title>BPSC Interview Prep | Mr. Chachar — For Aspirants of Balochistan</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
   --gold:#c9a84c;--gold-l:#e8c96a;--gold-d:#a07830;
@@ -29,6 +30,26 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);m
   background-size:44px 44px}
 .toast{position:fixed;bottom:70px;right:20px;z-index:1000;padding:10px 18px;background:var(--dark4);border:1px solid var(--border2);border-radius:10px;font-size:13px;color:var(--text);box-shadow:0 8px 30px rgba(0,0,0,.5);transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none;max-width:300px}
 .toast.show{transform:translateY(0);opacity:1}
+/* AUTH */
+#auth-section{position:relative;z-index:10;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
+.auth-card{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:2.5rem 2rem;max-width:420px;width:100%;animation:fsd .5s ease both}
+.auth-card h2{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--text);margin-bottom:.5rem}
+.auth-card p{font-size:13px;color:var(--text2);margin-bottom:1.5rem;line-height:1.6}
+.auth-field{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:9px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s;margin-bottom:10px}
+.auth-field:focus{border-color:var(--gold)}
+.auth-btn{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(201,168,76,0.35);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:8px}
+.auth-btn.primary{background:linear-gradient(135deg,var(--navy4),var(--em));color:var(--gold-l)}
+.auth-btn.primary:hover{transform:translateY(-2px);box-shadow:0 4px 24px rgba(201,168,76,0.2)}
+.auth-btn.secondary{background:transparent;color:var(--text2);border-color:var(--border)}
+.auth-btn.secondary:hover{color:var(--text);border-color:var(--border2)}
+.auth-divider{text-align:center;font-size:12px;color:var(--text3);margin:12px 0}
+.auth-error{font-size:12px;color:var(--danger);margin-bottom:8px;display:none;text-align:center}
+.auth-success{font-size:12px;color:var(--em-l);margin-bottom:8px;display:none;text-align:center}
+.auth-loading{text-align:center;font-size:13px;color:var(--gold);display:none}
+.nav-user{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
+.nav-user-email{font-size:11px;color:var(--text3);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-user-btn{padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:all .15s}
+.nav-user-btn:hover{color:var(--text);border-color:var(--border2)}
 /* LANDING */
 #landing{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center}
 .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 18px;background:linear-gradient(135deg,rgba(201,168,76,0.18),rgba(26,107,60,0.18));border:1px solid rgba(201,168,76,0.3);border-radius:100px;font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--gold-l);margin-bottom:1.75rem;animation:fsd .5s ease both}
@@ -212,6 +233,23 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 <body>
 <div class="bg-fx"></div><div class="bg-grid"></div>
 <div class="toast" id="toast"></div>
+<!-- AUTH SECTION -->
+<div id="auth-section">
+  <div class="auth-card">
+    <h2>🏛️ BPSC Interview Prep</h2>
+    <p>Sign in to save your progress. Your data stays private — only you can see it.</p>
+    <div id="auth-error" class="auth-error"></div>
+    <div id="auth-success" class="auth-success"></div>
+    <div id="auth-forms">
+      <input type="email" id="auth-email" class="auth-field" placeholder="Email address" autocomplete="email">
+      <input type="password" id="auth-password" class="auth-field" placeholder="Password" autocomplete="current-password">
+      <button class="auth-btn primary" id="auth-main-btn" onclick="handleAuth()">Sign In</button>
+      <button class="auth-btn secondary" id="auth-toggle-btn" onclick="toggleAuthMode()">Create an account instead</button>
+      <div class="auth-divider">—</div>
+      <div id="auth-loading" class="auth-loading">Please wait...</div>
+    </div>
+  </div>
+</div>
 <!-- LANDING PAGE -->
 <div id="landing">
   <div class="badge"><span class="dot"></span>BPSC Interview Prep — Mr. Chachar · For Aspirants of Balochistan</div>
@@ -263,6 +301,10 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
         <button class="nav-tab" data-section="s8">08·D-Day</button>
       </div>
       <div class="nav-timer" id="session-timer">⏱ 2:45:00</div>
+      <div class="nav-user" id="nav-user">
+        <span class="nav-user-email" id="nav-email"></span>
+        <button class="nav-user-btn" onclick="handleSignOut()">Sign out</button>
+      </div>
     </div>
   </div>
   <div class="content">
@@ -773,9 +815,143 @@ let mockIdx     = 0;
 let mockDone    = [];
 let mockScores  = [];
 let userProfile = {};
+let authMode = 'login';
+let currentUser = null;
 
+const supabase = createClient('https://dahuobhikjudonbwoagp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhaHVvYmhpa2p1ZG9uYndvYWdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDQ2NTQsImV4cCI6MjA5NTM4MDY1NH0.SAwnUA7oTO4lcd-HaE4jXJxeKDvNKu8hkVh9ZHI8YyQ');
 
-// Restore progress from localStorage
+// ═══════════════════════════
+//  AUTH FUNCTIONS
+// ═══════════════════════════
+function toggleAuthMode() {
+  authMode = authMode === 'login' ? 'signup' : 'login';
+  document.getElementById('auth-main-btn').textContent = authMode === 'login' ? 'Sign In' : 'Create Account';
+  document.getElementById('auth-toggle-btn').textContent = authMode === 'login' ? 'Create an account instead' : 'Have an account? Sign in';
+  document.getElementById('auth-error').style.display = 'none';
+  document.getElementById('auth-success').style.display = 'none';
+}
+
+async function handleAuth() {
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value.trim();
+  if (!email || !password) { showAuthError('Please enter email and password.'); return; }
+
+  document.getElementById('auth-loading').style.display = 'block';
+  document.getElementById('auth-main-btn').disabled = true;
+  document.getElementById('auth-error').style.display = 'none';
+  document.getElementById('auth-success').style.display = 'none';
+
+  try {
+    let result;
+    if (authMode === 'login') {
+      result = await supabase.auth.signInWithPassword({ email, password });
+      if (result.error) throw result.error;
+    } else {
+      result = await supabase.auth.signUp({ email, password });
+      if (result.error) throw result.error;
+      document.getElementById('auth-success').textContent = 'Account created! Check your email to confirm, then sign in.';
+      document.getElementById('auth-success').style.display = 'block';
+      document.getElementById('auth-loading').style.display = 'none';
+      document.getElementById('auth-main-btn').disabled = false;
+      toggleAuthMode();
+      return;
+    }
+    onAuthSuccess(result.data.user);
+  } catch (err) {
+    showAuthError(err.message || 'Authentication failed.');
+  }
+  document.getElementById('auth-loading').style.display = 'none';
+  document.getElementById('auth-main-btn').disabled = false;
+}
+
+async function handleSignOut() {
+  await supabase.auth.signOut();
+  currentUser = null;
+  document.getElementById('auth-section').style.display = 'flex';
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('nav-user').style.display = 'none';
+}
+
+function showAuthError(msg) {
+  const el = document.getElementById('auth-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+async function onAuthSuccess(user) {
+  currentUser = user;
+  document.getElementById('auth-section').style.display = 'none';
+  document.getElementById('landing').style.display = 'flex';
+  document.getElementById('nav-user').style.display = 'flex';
+  document.getElementById('nav-email').textContent = user.email;
+  await loadUserData();
+}
+
+// ═══════════════════════════
+//  SUPABASE DATA FUNCTIONS
+// ═══════════════════════════
+async function loadUserData() {
+  if (!currentUser) return;
+  try {
+    const { data, error } = await supabase.from('profiles').select('*').eq('id', currentUser.id).single();
+    if (error && error.code !== 'PGRST116') throw error;
+    if (data) {
+      if (data.progress) {
+        Object.keys(data.progress).forEach(k => {
+          if (data.progress[k] && Array.isArray(data.progress[k])) seenCards[k] = new Set(data.progress[k]);
+        });
+      }
+      if (data.name) userProfile.name = data.name;
+      if (data.degree) userProfile.degree = data.degree;
+      if (data.university) userProfile.uni = data.university;
+      if (data.post) userProfile.post = data.post;
+      if (data.district) userProfile.district = data.district;
+      if (data.strength_weakness) userProfile.sw = data.strength_weakness;
+      if (data.checklist) {
+        document.querySelectorAll('.checklist-cb').forEach((cb, i) => {
+          if (data.checklist[i]) cb.checked = true;
+        });
+      }
+    }
+  } catch (err) {
+    console.warn('Could not load profile:', err);
+  }
+}
+
+async function saveUserProfile() {
+  if (!currentUser) return;
+  try {
+    const progress = {};
+    Object.keys(seenCards).forEach(k => { progress[k] = [...seenCards[k]]; });
+    const checklist = Array.from(document.querySelectorAll('.checklist-cb')).map(c => c.checked);
+    await supabase.from('profiles').upsert({
+      id: currentUser.id,
+      name: userProfile.name || null,
+      degree: userProfile.degree || null,
+      university: userProfile.uni || null,
+      post: userProfile.post || null,
+      district: userProfile.district || null,
+      strength_weakness: userProfile.sw || null,
+      session_duration: sessionTime,
+      progress,
+      checklist,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'id' });
+  } catch {}
+}
+
+async function saveUserMockResult(questionIndex, answer, score) {
+  if (!currentUser) return;
+  try {
+    await supabase.from('mock_results').upsert({
+      user_id: currentUser.id,
+      question_index: questionIndex,
+      answer,
+      score
+    }, { onConflict: 'user_id,question_index' });
+  } catch {}
+}
 try {
   const saved = localStorage.getItem('bpsc_progress');
   if (saved) {
@@ -811,6 +987,7 @@ function saveProgress() {
     Object.keys(seenCards).forEach(k => { p.seenCards[k] = [...seenCards[k]]; });
     localStorage.setItem('bpsc_progress', JSON.stringify(p));
   } catch {}
+  saveUserProfile();
 }
 
 if (location.protocol === 'file:') {
@@ -829,6 +1006,7 @@ function saveChecklist() {
   const items = document.querySelectorAll('.checklist-cb');
   const state = Array.from(items).map(i => i.checked);
   try { localStorage.setItem('bpsc_checklist', JSON.stringify(state)); } catch {}
+  saveUserProfile();
 }
 
 // ── 10 MOCK INTERVIEW QUESTIONS (covers all 3 universal BPSC subjects + intro + degree) ──
@@ -900,6 +1078,7 @@ function startApp() {
   };
   const durSel = document.getElementById('l-duration');
   if (durSel) sessionTime = parseInt(durSel.value) || 9900;
+  saveUserProfile();
 
   // Pre-fill Module 1 and Module 2 fields from landing
   if (userProfile.name)     document.getElementById('i-name').value      = userProfile.name;
@@ -1419,6 +1598,7 @@ function showFeedback(score, stars, label, feedback) {
   document.getElementById('mock-feedback').classList.add('show');
 
   if (!mockDone.includes(mockIdx)) { mockDone.push(mockIdx); mockScores.push(pct); }
+  saveUserMockResult(mockIdx, document.getElementById('mock-answer')?.value?.trim() || '', pct);
   const dot = document.getElementById('mdot-' + mockIdx);
   if (dot) dot.className = 'mock-dot done active';
   const sb = document.getElementById('submit-btn');
@@ -1548,6 +1728,23 @@ function initEventListeners() {
   } catch {}
 }
 document.addEventListener('DOMContentLoaded', initEventListeners);
+
+// Check for existing session on page load
+supabase.auth.getSession().then(({ data }) => {
+  if (data.session?.user) {
+    onAuthSuccess(data.session.user);
+  }
+});
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_IN' && session?.user) onAuthSuccess(session.user);
+  if (event === 'SIGNED_OUT') {
+    currentUser = null;
+    document.getElementById('auth-section').style.display = 'flex';
+    document.getElementById('landing').style.display = 'none';
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('nav-user').style.display = 'none';
+  }
+});
 
 function markModuleComplete(sec) {
   const total = secTotals[sec];
