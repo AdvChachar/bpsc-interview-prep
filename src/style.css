@@ -32,6 +32,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);m
 .auth-btn.primary:hover{transform:translateY(-2px);box-shadow:0 4px 24px rgba(201,168,76,0.2)}
 .auth-btn.secondary{background:transparent;color:var(--text2);border-color:var(--border)}
 .auth-btn.secondary:hover{color:var(--text);border-color:var(--border2)}
+.auth-btn.oauth{display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(255,255,255,0.04);border-color:var(--border);color:var(--text);font-weight:500}
+.auth-btn.oauth:hover{background:rgba(255,255,255,0.08);border-color:var(--border2)}
+.auth-btn.oauth svg{flex-shrink:0}
+.oauth-group{display:flex;gap:8px;margin-bottom:8px}
+.oauth-group .auth-btn.oauth{flex:1}
 .auth-divider{text-align:center;font-size:12px;color:var(--text3);margin:12px 0}
 .auth-error{font-size:12px;color:var(--danger);margin-bottom:8px;display:none;text-align:center}
 .auth-success{font-size:12px;color:var(--em-l);margin-bottom:8px;display:none;text-align:center}

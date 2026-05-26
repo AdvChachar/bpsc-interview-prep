@@ -16,23 +16,41 @@ let userProfile = {};
 let authMode = 'login';
 let currentUser = null;
 
-const supabase = window.supabase.createClient('https://dahuobhikjudonbwoagp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhaHVvYmhpa2p1ZG9uYndvYWdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDQ2NTQsImV4cCI6MjA5NTM4MDY1NH0.SAwnUA7oTO4lcd-HaE4jXJxeKDvNKu8hkVh9ZHI8YyQ');
+const SUPABASE_URL = 'https://dahuobhikjudonbwoagp.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhaHVvYmhpa2p1ZG9uYndvYWdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDQ2NTQsImV4cCI6MjA5NTM4MDY1NH0.SAwnUA7oTO4lcd-HaE4jXJxeKDvNKu8hkVh9ZHI8YyQ';
+if (!window.supabase) {
+  console.error('Supabase CDN failed to load — check network / ad blocker');
+  document.addEventListener('DOMContentLoaded', () => {
+    showAuthError('Auth library failed to load. Please disable ad blockers or try a different browser.');
+  });
+}
+const supabase = window.supabase?.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ═══════════════════════════
 //  AUTH FUNCTIONS
 // ═══════════════════════════
 function toggleAuthMode() {
   authMode = authMode === 'login' ? 'signup' : 'login';
-  document.getElementById('auth-main-btn').textContent = authMode === 'login' ? 'Sign In' : 'Create Account';
-  document.getElementById('auth-toggle-btn').textContent = authMode === 'login' ? 'Create an account instead' : 'Have an account? Sign in';
+  const isLogin = authMode === 'login';
+  document.getElementById('auth-main-btn').textContent = isLogin ? 'Sign In' : 'Create Account';
+  document.getElementById('auth-toggle-btn').textContent = isLogin ? 'Create an account instead' : 'Have an account? Sign in';
+  document.getElementById('auth-password-confirm').style.display = isLogin ? 'none' : 'block';
   document.getElementById('auth-error').style.display = 'none';
   document.getElementById('auth-success').style.display = 'none';
 }
 
 async function handleAuth() {
+  if (!supabase) { showAuthError('Auth service unavailable. Please try again later.'); return; }
   const email = document.getElementById('auth-email').value.trim();
   const password = document.getElementById('auth-password').value.trim();
   if (!email || !password) { showAuthError('Please enter email and password.'); return; }
+
+  if (authMode === 'signup') {
+    const confirm = document.getElementById('auth-password-confirm').value.trim();
+    if (!confirm) { showAuthError('Please confirm your password.'); return; }
+    if (password !== confirm) { showAuthError('Passwords do not match.'); return; }
+    if (password.length < 6) { showAuthError('Password must be at least 6 characters.'); return; }
+  }
 
   document.getElementById('auth-loading').style.display = 'block';
   document.getElementById('auth-main-btn').disabled = true;
@@ -70,7 +88,38 @@ async function handleAuth() {
   document.getElementById('auth-main-btn').disabled = false;
 }
 
+async function handleGoogleSignIn() {
+  if (!supabase) { showAuthError('Auth service unavailable.'); return; }
+  document.getElementById('auth-loading').style.display = 'block';
+  try {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin }
+    });
+    if (error) throw error;
+  } catch (err) {
+    showAuthError('Google sign-in failed: ' + (err.message || 'Unknown error'));
+    document.getElementById('auth-loading').style.display = 'none';
+  }
+}
+
+async function handleFacebookSignIn() {
+  if (!supabase) { showAuthError('Auth service unavailable.'); return; }
+  document.getElementById('auth-loading').style.display = 'block';
+  try {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'facebook',
+      options: { redirectTo: window.location.origin }
+    });
+    if (error) throw error;
+  } catch (err) {
+    showAuthError('Facebook sign-in failed: ' + (err.message || 'Unknown error'));
+    document.getElementById('auth-loading').style.display = 'none';
+  }
+}
+
 async function handleSignOut() {
+  if (!supabase) return;
   await supabase.auth.signOut();
   currentUser = null;
   document.getElementById('auth-section').style.display = 'flex';
@@ -936,21 +985,23 @@ function initEventListeners() {
 document.addEventListener('DOMContentLoaded', initEventListeners);
 
 // Check for existing session on page load
-supabase.auth.getSession().then(({ data }) => {
-  if (data.session?.user) {
-    onAuthSuccess(data.session.user);
-  }
-});
-supabase.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_IN' && session?.user) onAuthSuccess(session.user);
-  if (event === 'SIGNED_OUT') {
-    currentUser = null;
-    document.getElementById('auth-section').style.display = 'flex';
-    document.getElementById('landing').style.display = 'none';
-    document.getElementById('app').style.display = 'none';
-    document.getElementById('nav-user').style.display = 'none';
-  }
-});
+if (supabase) {
+  supabase.auth.getSession().then(({ data }) => {
+    if (data.session?.user) {
+      onAuthSuccess(data.session.user);
+    }
+  });
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session?.user) onAuthSuccess(session.user);
+    if (event === 'SIGNED_OUT') {
+      currentUser = null;
+      document.getElementById('auth-section').style.display = 'flex';
+      document.getElementById('landing').style.display = 'none';
+      document.getElementById('app').style.display = 'none';
+      document.getElementById('nav-user').style.display = 'none';
+    }
+  });
+}
 
 function markModuleComplete(sec) {
   const total = secTotals[sec];
