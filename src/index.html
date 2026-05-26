@@ -1,0 +1,585 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BPSC Interview Prep | Mr. Chachar â€” For Aspirants of Balochistan</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>ðŸ›ï¸</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg-fx"></div><div class="bg-grid"></div>
+<div class="toast" id="toast"></div>
+<!-- AUTH SECTION -->
+<div id="auth-section">
+  <div class="auth-card">
+    <h2>ðŸ›ï¸ BPSC Interview Prep</h2>
+    <p>Sign in to save your progress. Your data stays private â€” only you can see it.</p>
+    <div id="auth-error" class="auth-error"></div>
+    <div id="auth-success" class="auth-success"></div>
+    <div id="auth-forms">
+      <input type="email" id="auth-email" class="auth-field" placeholder="Email address" autocomplete="email">
+      <input type="password" id="auth-password" class="auth-field" placeholder="Password" autocomplete="current-password">
+      <button class="auth-btn oauth" data-action="oauth-google"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 24.5c0-1.6-.1-3.1-.4-4.6H24v8.7h11c-.5 2.6-1.9 4.9-4 6.4v5.3h6.5c3.8-3.5 6-8.7 6-15.8z"/><path fill="#34A853" d="M24 44c5.4 0 10-1.8 13.3-4.9l-6.5-5.3c-1.8 1.2-4.1 1.9-6.8 1.9-5.2 0-9.6-3.5-11.2-8.3H6.1v5.4C9.4 39.3 16.2 44 24 44z"/><path fill="#4CAF50" d="M12.8 27.5c-.4-1.2-.6-2.5-.6-3.8s.2-2.6.6-3.8v-5.4H6.1C4.4 18 3.4 21 3.4 24s1 6 2.7 8.5l6.7-5z"/><path fill="#1976D2" d="M24 9.5c3 0 5.6 1 7.7 3.1l5.8-5.8C33.9 3.8 29.3 2 24 2 16.2 2 9.4 6.7 6.1 14.5l6.7 5.4c1.6-4.8 6-8.3 11.2-8.3z"/></svg> Sign in with Google</button>
+      <button class="auth-btn oauth-fb" data-action="oauth-facebook"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#fff" d="M24 2C11.8 2 2 11.8 2 24s9.8 22 22 22 22-9.8 22-22S36.2 2 24 2zm6 15.5h-2.5c-.8 0-1.5.7-1.5 1.5v3.5h4l-.5 4H26v12h-5V26.5h-3V22h3v-3.5c0-3.3 2.7-6 6-6H30v5z"/></svg> Sign in with Facebook</button>
+      <div class="auth-divider">â€” or continue with email â€”</div>
+      <button class="auth-btn primary" id="auth-main-btn" onclick="handleAuth()">Sign In</button>
+      <button class="auth-btn secondary" id="auth-toggle-btn" onclick="toggleAuthMode()">Create an account instead</button>
+      <div id="auth-loading" class="auth-loading">Please wait...</div>
+    </div>
+  </div>
+</div>
+<!-- LANDING PAGE -->
+<div id="landing">
+  <div class="badge"><span class="dot"></span>BPSC Interview Prep â€” Mr. Chachar Â· For Aspirants of Balochistan</div>
+  <h1 class="hero-title"><span class="grad">Crack Your BPSC</span><br>Interview with Confidence</h1>
+  <p class="hero-sub">A complete <strong>personalized prep session</strong> built around <em>you</em> â€” your background, your degree, your story. Three universal BPSC subjects mastered. Walk in prepared.</p>
+  <div class="profile-gather">
+    <div class="pg-title">ðŸ‘¤ Tell Us About You â€” We Personalize Everything</div>
+    <div class="pg-grid">
+      <div class="pg-row"><label>Your Full Name</label><input type="text" id="l-name" placeholder="e.g. Muhammad Ali Baloch"/></div>
+      <div class="pg-row"><label>Degree / Qualification</label><input type="text" id="l-degree" placeholder="e.g. MBA, LLB, B.Com, BSc"/></div>
+      <div class="pg-row"><label>University / Institute</label><input type="text" id="l-uni" placeholder="e.g. University of Balochistan"/></div>
+      <div class="pg-row"><label>Post Applied For</label><input type="text" id="l-post" placeholder="e.g. Assistant BPS-14, Inspector"/></div>
+    </div>
+    <div class="pg-row"><label>District / Hometown</label><input type="text" id="l-district" placeholder="e.g. Quetta, Turbat, Khuzdar, Sibi, Zhob..."/></div>
+    <div class="pg-row"><label>One Strength &amp; Weakness (brief)</label><textarea id="l-sw" placeholder="Strength: e.g. detail-oriented, fast learner&#10;Weakness: e.g. I sometimes over-prepare"></textarea></div>
+    <div class="pg-row"><label>â± Session Duration</label><select id="l-duration"><option value="9900">2h 45m (default)</option><option value="7200">2h</option><option value="5400">1h 30m</option><option value="3600">1h</option><option value="1800">30m</option></select></div>
+  </div>
+  <div class="plan-grid">
+    <div class="plan-card"><div class="plan-num">MODULE 01</div><div class="plan-title">ðŸ“Œ Self Introduction</div><div class="plan-sub">AI builds YOUR intro, then tests you</div><div class="plan-time" style="background:rgba(201,168,76,0.15);color:#e8c96a">~25 mins</div></div>
+    <div class="plan-card"><div class="plan-num">MODULE 02</div><div class="plan-title">ðŸŽ“ Your Degree</div><div class="plan-sub">AI generates subject questions for YOUR degree</div><div class="plan-time" style="background:rgba(26,107,60,0.15);color:#6ee7b7">~30 mins</div></div>
+    <div class="plan-card"><div class="plan-num">MODULE 03</div><div class="plan-title">ðŸ›ï¸ Indo-Pak History</div><div class="plan-sub">1857 to present â€” BPSC universal subject 1</div><div class="plan-time" style="background:rgba(245,158,11,0.15);color:#fbbf24">~25 mins</div></div>
+    <div class="plan-card"><div class="plan-num">MODULE 04</div><div class="plan-title">â˜ªï¸ Islamic Studies</div><div class="plan-sub">Daily life, Caliphate â€” BPSC universal subject 2</div><div class="plan-time" style="background:rgba(39,160,90,0.15);color:#6ee7b7">~20 mins</div></div>
+    <div class="plan-card"><div class="plan-num">MODULE 05</div><div class="plan-title">ðŸ“° Current Affairs</div><div class="plan-sub">Pakistan &amp; Balochistan â€” BPSC universal subject 3</div><div class="plan-time" style="background:rgba(8,145,178,0.15);color:#67e8f9">~20 mins</div></div>
+    <div class="plan-card"><div class="plan-num">MODULE 06</div><div class="plan-title">ðŸŽ¯ Mock Interview</div><div class="plan-sub">Full AI panel simulation + scoring</div><div class="plan-time" style="background:rgba(239,68,68,0.15);color:#f87171">~25 mins</div></div>
+    <div class="plan-card"><div class="plan-num">MODULE 07</div><div class="plan-title">ðŸ“‹ Cheat Sheet</div><div class="plan-sub">Dates, facts, articles &amp; power phrases</div><div class="plan-time" style="background:rgba(124,58,237,0.15);color:#a78bfa">~10 mins</div></div>
+    <div class="plan-card"><div class="plan-num">MODULE 08</div><div class="plan-title">ðŸ† D-Day Strategy</div><div class="plan-sub">Confidence, attire &amp; final mindset</div><div class="plan-time" style="background:rgba(201,168,76,0.15);color:#e8c96a">~10 mins</div></div>
+  </div>
+  <button class="start-btn">â–¶ &nbsp;Begin Your Personalized Prep Session</button>
+  <div class="credit-footer">
+    <span class="chachar">â€” Created by Mr. CHACHAR â€”</span><br>
+    with sincerity and faithfulness for the Aspirants of Balochistan ðŸŒ¹<br>
+    <em style="font-size:11px">Free for every son and daughter of Balochistan preparing for BPSC. Your success is our mission.</em>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div id="app">
+  <div class="top-nav">
+    <div class="nav-inner">
+      <div class="nav-logo">BPSC Prep Â· Mr. Chachar</div>
+      <div class="nav-tabs">
+        <button class="nav-tab active" data-section="s1">01Â·Intro</button>
+        <button class="nav-tab" data-section="s2">02Â·Degree</button>
+        <button class="nav-tab" data-section="s3">03Â·History</button>
+        <button class="nav-tab" data-section="s4">04Â·Islamic</button>
+        <button class="nav-tab" data-section="s5">05Â·Current Affairs</button>
+        <button class="nav-tab" data-section="s6">06Â·Mock</button>
+        <button class="nav-tab" data-section="s7">07Â·Cheat Sheet</button>
+        <button class="nav-tab" data-section="s8">08Â·D-Day</button>
+      </div>
+      <div class="nav-timer" id="session-timer">â± 2:45:00</div>
+      <div class="nav-user" id="nav-user">
+        <span class="nav-user-email" id="nav-email"></span>
+        <button class="nav-user-btn" onclick="handleSignOut()">Sign out</button>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+  <!-- MODULE 1: SELF INTRODUCTION â€” 3-Fold System -->
+  <div class="section-page active" id="s1">
+    <div class="sec-hero" style="border-color:rgba(201,168,76,0.25)">
+      <div class="sec-eyebrow" style="color:var(--gold)">Module 01 Â· ~25 minutes Â· 3-Fold Method</div>
+      <div class="sec-title">Self Introduction â€” Your Most Important Answer</div>
+      <div class="sec-desc">Every BPSC panel opens with "Tell me about yourself." This module follows the <strong>3-Fold System</strong>: Step 1 â€” You share your details. Step 2 â€” AI builds your personalized intro script and answers. Step 3 â€” You practice and get tested on it.</div>
+      <div class="sec-chips">
+        <span class="sec-chip" style="background:rgba(201,168,76,0.12);color:var(--gold)">Step 1: You Share</span>
+        <span class="sec-chip" style="background:rgba(26,107,60,0.12);color:#6ee7b7">Step 2: AI Prepares</span>
+        <span class="sec-chip" style="background:rgba(8,145,178,0.12);color:#67e8f9">Step 3: You Practice</span>
+      </div>
+    </div>
+    <div class="phase-divider"><div class="phase-divider-line"></div><div class="phase-divider-label">ðŸ“ Phase 1 â€” Tell Us About You</div><div class="phase-divider-line"></div></div>
+    <div class="intro-gather">
+      <div class="ig-title">ðŸŽ¤ Your Details â€” AI Will Build Your Personalized Introduction From This</div>
+      <div class="ig-sub">Be specific and honest. The more detail you give, the stronger and more genuine your generated introduction will be.</div>
+      <div class="ig-grid">
+        <div class="ig-field"><label>Full Name</label><input type="text" id="i-name" placeholder="Your full name"/></div>
+        <div class="ig-field"><label>District / City</label><input type="text" id="i-district" placeholder="e.g. Turbat, Khuzdar, Quetta"/></div>
+        <div class="ig-field"><label>Degree</label><input type="text" id="i-degree" placeholder="e.g. MBA Finance, LLB, BSc CS"/></div>
+        <div class="ig-field"><label>University</label><input type="text" id="i-uni" placeholder="e.g. University of Balochistan"/></div>
+        <div class="ig-field"><label>Post Applied For</label><input type="text" id="i-post" placeholder="e.g. Assistant BPS-14, Inspector"/></div>
+        <div class="ig-field"><label>Graduation Year</label><input type="text" id="i-year" placeholder="e.g. 2023"/></div>
+        <div class="ig-field ig-full"><label>Your Key Strength (1â€“2 sentences)</label><input type="text" id="i-strength" placeholder="e.g. I am analytical, disciplined and committed to public service"/></div>
+        <div class="ig-field ig-full"><label>Why This Post / Why BPSC?</label><textarea id="i-why" placeholder="e.g. I want to serve Balochistan's development. My degree connects directly to this role..."></textarea></div>
+        <div class="ig-field ig-full"><label>Any Achievement (optional)</label><input type="text" id="i-achievement" placeholder="e.g. Topped department, internship at..."/></div>
+      </div>
+      <button class="gen-btn" id="gen-intro-btn">âœ¨ Generate My Personalized Introduction</button>
+      <div class="ai-loading" id="intro-loading"><div class="ai-spinner"></div><span id="intro-loading-text">Building your personalized intro script...</span></div>
+    </div>
+    <div id="intro-cards-wrap" style="display:none">
+      <div class="phase-divider"><div class="phase-divider-line"></div><div class="phase-divider-label">ðŸŒŸ Phase 2 â€” Your AI-Generated Prep Material</div><div class="phase-divider-line"></div></div>
+      <div id="intro-generated-content"></div>
+      <div class="progress-tracker"><div class="pt-label">Intro module progress</div><div class="pt-bar-bg"><div class="pt-bar-fill" id="pt1" style="width:0%"></div></div><div class="pt-count" id="pc1">0/6</div><button class="mock-btn secondary" data-action="mark-complete" data-sec="1" style="padding:3px 10px;font-size:11px;margin-left:auto" title="Mark all intro questions as seen">âœ“ Mark done</button></div>
+      <div class="q-card" data-sec="1"><div class="q-head" ><div class="q-badge" style="background:rgba(201,168,76,0.12);color:var(--gold)">1</div><div class="q-info"><div class="q-category" style="color:var(--gold)">Always First â€” Opening Question</div><div class="q-text">"Tell me about yourself." / "Apna taaruf karaen."</div></div><div class="q-toggle">â–¾</div></div>
+        <div class="q-body"><div class="answer-label">â­ 60-Second Structure (Use the AI-generated script above)</div>
+          <div class="model-answer"><p><strong>Part 1 â€” Name &amp; Background:</strong> "Respected panel, my name is [Name] from [District], Balochistan. I completed my [Degree] from [University]."</p><p><strong>Part 2 â€” Connect to Post:</strong> "My studies in [key subject] give me a foundation directly relevant to this position."</p><p><strong>Part 3 â€” Character:</strong> "I am [your strength]. I believe in [a relevant value â€” honesty, service, rule of law]."</p><p><strong>Part 4 â€” Close:</strong> "I am fully committed to this responsibility and to contributing to Balochistan's progress through honest public service."</p></div>
+          <div class="dos-donts"><div class="do-box"><div class="box-label">âœ“ Do This</div><div class="box-item">Speak in 60â€“75 seconds exactly</div><div class="box-item">Connect your degree to the post</div><div class="box-item">End with commitment to Balochistan</div><div class="box-item">Maintain eye contact with all panel members</div></div><div class="dont-box"><div class="box-label">âœ— Avoid This</div><div class="box-item">Don't recite your CV line by line</div><div class="box-item">Don't say "I am a simple person"</div><div class="box-item">Don't exceed 2 minutes</div><div class="box-item">Don't mention salary expectations</div></div></div>
+          <div class="pro-tip"><strong>ðŸŽ¯ Pro Tip:</strong> Practice your intro out loud â€” in front of a mirror â€” at least 5 times tonight. It sets the entire tone of your interview.</div>
+        </div>
+      </div>
+      <div class="q-card" data-sec="1"><div class="q-head" ><div class="q-badge" style="background:rgba(201,168,76,0.12);color:var(--gold)">2</div><div class="q-info"><div class="q-category" style="color:var(--gold)">About You</div><div class="q-text">"What are your strengths and weaknesses?"</div></div><div class="q-toggle">â–¾</div></div>
+        <div class="q-body"><div class="answer-label">â­ Framework (Use AI-generated answers above for personalized version)</div>
+          <div class="model-answer"><p><strong>Strength:</strong> "My biggest strength is [specific trait]. For example, [one concrete example from your studies or life]. This directly helps me in [relate to post]."</p><p><strong>Weakness:</strong> "A weakness I am actively working on is [real but non-disqualifying â€” e.g. over-preparing, public speaking]. I am improving by [what you do about it]."</p></div>
+          <div class="pro-tip"><strong>ðŸŽ¯ Pro Tip:</strong> Never say "I have no weaknesses." Panels respect self-awareness. Pick a weakness that shows you are conscientious â€” not one that disqualifies you.</div>
+        </div>
+      </div>
+      <div class="q-card" data-sec="1"><div class="q-head" ><div class="q-badge" style="background:rgba(201,168,76,0.12);color:var(--gold)">3</div><div class="q-info"><div class="q-category" style="color:var(--gold)">Motivation</div><div class="q-text">"Why do you want to join government service / BPSC?"</div></div><div class="q-toggle">â–¾</div></div>
+        <div class="q-body"><div class="answer-label">â­ Model Answer â€” 3 Layers</div>
+          <div class="model-answer"><p><strong>1. Personal:</strong> "I am from [District]. I have seen firsthand how much good governance matters for the people of Balochistan."</p><p><strong>2. Professional:</strong> "My [Degree] gives me the exact knowledge base needed â€” [how degree connects to post]."</p><p><strong>3. Mission:</strong> "I want to be part of the institution that delivers governance to our people. The scale of impact through public service is incomparable."</p></div>
+          <div class="law-ref">Key phrase: "I want to serve â€” not just earn. Balochistan needs dedicated officers from Balochistan."</div>
+        </div>
+      </div>
+      <div class="q-card" data-sec="1"><div class="q-head" ><div class="q-badge" style="background:rgba(201,168,76,0.12);color:var(--gold)">4</div><div class="q-info"><div class="q-category" style="color:var(--gold)">About Balochistan</div><div class="q-text">"What do you know about Balochistan's challenges and opportunities?"</div></div><div class="q-toggle">â–¾</div></div>
+        <div class="q-body"><div class="answer-label">â­ Model Answer</div>
+          <div class="model-answer"><p><strong>Challenges:</strong> "Literacy ~46%, sparse health facilities, water scarcity, connectivity gaps. Despite covering 44% of Pakistan's land, the province has the smallest population share and receives ~9.09% NFC transfers."</p><p><strong>Opportunities:</strong> "CPEC and Gwadar port position Balochistan as Pakistan's economic gateway. Reko Diq copper-gold project ($7 billion) coming online. Natural gas, renewable energy, and marine resources are enormous potential."</p><p><strong>Your role:</strong> "An honest, capable civil servant in Balochistan is not just filling a post â€” they are part of the solution."</p></div>
+          <div class="law-ref">Key facts: 44% area Â· ~5% population Â· NFC ~9.09% Â· Reko Diq $7B Â· CPEC hub at Gwadar</div>
+        </div>
+      </div>
+      <div class="q-card" data-sec="1"><div class="q-head" ><div class="q-badge" style="background:rgba(201,168,76,0.12);color:var(--gold)">5</div><div class="q-info"><div class="q-category" style="color:var(--gold)">Integrity Test</div><div class="q-text">"If a senior officer asks you to do something you know is wrong, what will you do?"</div></div><div class="q-toggle">â–¾</div></div>
+        <div class="q-body"><div class="answer-label">â­ Model Answer â€” Show character, not just compliance</div>
+          <div class="model-answer"><p>"I would first respectfully seek clarification â€” it is possible there is context I am unaware of."</p><p><strong>If genuinely wrong:</strong> "I would respectfully decline and explain my concern. I would document the situation and, if necessary, escalate through proper institutional channels."</p><p><strong>Principle:</strong> "My loyalty is first to the law, then to the institution, then to my seniors. No personal relationship justifies a violation of public trust."</p></div>
+          <div class="pro-tip"><strong>ðŸŽ¯ Pro Tip:</strong> Show zero hesitation on integrity â€” but also institutional maturity, not recklessness.</div>
+        </div>
+      </div>
+      <div class="q-card" data-sec="1"><div class="q-head" ><div class="q-badge" style="background:rgba(201,168,76,0.12);color:var(--gold)">6</div><div class="q-info"><div class="q-category" style="color:var(--gold)">Future Vision</div><div class="q-text">"Where do you see yourself in 5â€“10 years?"</div></div><div class="q-toggle">â–¾</div></div>
+        <div class="q-body"><div class="answer-label">â­ Model Answer</div>
+          <div class="model-answer"><p>"In 5 years â€” master my current role thoroughly, earn the trust of my department and the public I serve."</p><p>"In 10 years â€” contribute to policy and administrative improvements that make Balochistan's governance more effective."</p><p>"Ultimately â€” be the kind of civil servant the people of Balochistan are proud of. Someone who served with integrity and left the institution stronger."</p></div>
+        </div>
+      </div>
+      <div class="phase-divider"><div class="phase-divider-line"></div><div class="phase-divider-label">ðŸ§ª Phase 3 â€” Practice &amp; Test Yourself</div><div class="phase-divider-line"></div></div>
+      <div id="intro-practice-arena"></div>
+    </div>
+  </div>
+
+  <!-- MODULE 2: DEGREE â€” 3-Fold System -->
+  <div class="section-page" id="s2">
+    <div class="sec-hero" style="border-color:rgba(39,160,90,0.2)">
+      <div class="sec-eyebrow" style="color:var(--em-l)">Module 02 Â· ~30 minutes Â· 3-Fold Method</div>
+      <div class="sec-title">Your Degree â€” Your Technical Superpower</div>
+      <div class="sec-desc">BPSC panels ask subject-specific questions from your academic field. This module collects your degree details, generates tailored questions with model answers for your specific discipline, then tests you. This is where your education pays off in the interview room.</div>
+      <div class="sec-chips"><span class="sec-chip" style="background:rgba(39,160,90,0.12);color:#6ee7b7">Step 1: Confirm Degree</span><span class="sec-chip" style="background:rgba(201,168,76,0.12);color:var(--gold)">Step 2: AI Generates Questions</span><span class="sec-chip" style="background:rgba(8,145,178,0.12);color:#67e8f9">Step 3: Test Yourself</span></div>
+    </div>
+    <div class="phase-divider"><div class="phase-divider-line"></div><div class="phase-divider-label">ðŸ“š Phase 1 â€” Your Academic Profile</div><div class="phase-divider-line"></div></div>
+    <div class="intro-gather">
+      <div class="ig-title">ðŸŽ“ Degree Details â€” For Tailored Subject Questions</div>
+      <div class="ig-sub">Enter your degree details so AI generates questions exactly matching what a BPSC panel would ask based on your academic background.</div>
+      <div class="ig-grid">
+        <div class="ig-field"><label>Degree Title</label><input type="text" id="d-degree" placeholder="e.g. MBA Finance, LLB, BSc Economics"/></div>
+        <div class="ig-field"><label>Specialization / Major</label><input type="text" id="d-major" placeholder="e.g. Finance, Tax Law, Computer Science"/></div>
+        <div class="ig-field"><label>University</label><input type="text" id="d-uni" placeholder="e.g. University of Balochistan, BUITEMS"/></div>
+        <div class="ig-field"><label>Graduation Year</label><input type="text" id="d-year" placeholder="e.g. 2022, 2023"/></div>
+        <div class="ig-field ig-full"><label>2â€“3 Core Subjects You Studied (comma separated)</label><input type="text" id="d-subjects" placeholder="e.g. Financial Accounting, Corporate Finance, Business Law"/></div>
+        <div class="ig-field ig-full"><label>Post Applied For</label><input type="text" id="d-post" placeholder="e.g. Assistant BPSC BPS-14, Accounts Officer"/></div>
+      </div>
+      <button class="gen-btn" id="gen-degree-btn">ðŸ“– Generate My Degree Questions &amp; Answers</button>
+      <div class="ai-loading" id="degree-loading"><div class="ai-spinner"></div><span id="degree-loading-text">Generating tailored questions from your degree...</span></div>
+    </div>
+    <div id="degree-cards-wrap" style="display:none">
+      <div class="phase-divider"><div class="phase-divider-line"></div><div class="phase-divider-label">ðŸŒŸ Phase 2 â€” Your Personalized Degree Questions</div><div class="phase-divider-line"></div></div>
+      <div class="progress-tracker"><div class="pt-label">Degree module progress</div><div class="pt-bar-bg"><div class="pt-bar-fill" id="pt2" style="width:0%"></div></div><div class="pt-count" id="pc2">0/8</div><button class="mock-btn secondary" data-action="mark-complete" data-sec="2" style="padding:3px 10px;font-size:11px;margin-left:auto" title="Mark all degree questions as seen">âœ“ Mark done</button></div>
+      <div id="degree-generated-content"></div>
+      <div class="phase-divider"><div class="phase-divider-line"></div><div class="phase-divider-label">ðŸ§ª Phase 3 â€” Practice Your Degree Answers</div><div class="phase-divider-line"></div></div>
+      <div id="degree-practice-arena"></div>
+    </div>
+  </div>
+  <!-- MODULE 3: INDO-PAK HISTORY -->
+  <div class="section-page" id="s3">
+    <div class="sec-hero" style="border-color:rgba(245,158,11,0.2)">
+      <div class="sec-eyebrow" style="color:#fbbf24">Module 03 Â· ~25 minutes Â· BPSC Universal Subject 1 of 3</div>
+      <div class="sec-title">Indo-Pak History â€” 1857 to Present Day</div>
+      <div class="sec-desc">This is one of <strong>three subjects asked in ALL BPSC interviews</strong> regardless of post or department. Master every question here. Dates, turning points, and key figures all matter to the panel.</div>
+      <div class="sec-chips"><span class="sec-chip" style="background:rgba(245,158,11,0.12);color:#fbbf24">Mandatory BPSC Subject</span><span class="sec-chip" style="background:rgba(201,168,76,0.12);color:var(--gold)">12 Key Questions</span></div>
+    </div>
+    <div class="progress-tracker"><div class="pt-label">History module progress</div><div class="pt-bar-bg"><div class="pt-bar-fill" id="pt3" style="width:0%"></div></div><div class="pt-count" id="pc3">0/12</div><button class="mock-btn secondary" data-action="mark-complete" data-sec="3" style="padding:3px 10px;font-size:11px;margin-left:auto" title="Mark all history questions as seen">âœ“ Mark done</button></div>
+
+    <div class="q-card" data-sec="3"><div class="q-head" ><div class="q-badge" style="background:rgba(245,158,11,0.12);color:#fbbf24">1</div><div class="q-info"><div class="q-category" style="color:#fbbf24">1857 War of Independence</div><div class="q-text">"What was the War of 1857 and why is it significant for Pakistan's creation?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Nature:</strong> "The War of 1857 â€” called Sepoy Mutiny by the British and First War of Independence by South Asians â€” was a major uprising against British East India Company rule. Began Meerut, 10 May 1857."</p><p><strong>Causes:</strong> "Religious insensitivity (greased cartridges), land annexation (Doctrine of Lapse under Dalhousie), displacement of rulers, and economic exploitation."</p><p><strong>Result:</strong> "Uprising suppressed. British Crown directly assumed governance, ending the East India Company. Mughal Emperor Bahadur Shah Zafar exiled."</p><p><strong>Significance for Pakistan:</strong> "Beginning of Muslim political consciousness. Sir Syed Ahmad Khan observed Muslims were disproportionately blamed â€” this led to the Aligarh Movement, a foundational step toward separate Muslim identity."</p></div><div class="law-ref">1857 Uprising â†’ Crown Rule â†’ Sir Syed's Aligarh Movement â†’ Muslim Consciousness â†’ Two-Nation Theory â†’ Pakistan 1947</div></div>
+    </div>
+
+    <div class="q-card" data-sec="3"><div class="q-head" ><div class="q-badge" style="background:rgba(245,158,11,0.12);color:#fbbf24">2</div><div class="q-info"><div class="q-category" style="color:#fbbf24">Sir Syed &amp; Aligarh</div><div class="q-text">"What was Sir Syed Ahmad Khan's contribution to Muslim renaissance in India?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Who:</strong> "Sir Syed Ahmad Khan (1817â€“1898) â€” educator, social reformer, Muslim intellectual leader."</p><p><strong>Aligarh Movement:</strong> "Founded Muhammadan Anglo-Oriental College at Aligarh in 1875 â€” later Aligarh Muslim University. Mission: combine Western education with Islamic values to produce capable Muslim leaders."</p><p><strong>Two-Nation Seeds:</strong> "Sir Syed argued Hindus and Muslims were two distinct nations with different histories, religions, and cultures. Developed further by Iqbal and Quaid â€” became the Two-Nation Theory."</p><p><strong>Political stance:</strong> "Advised Muslims to stay away from Congress, focus on education. Founded All India Muhammadan Educational Conference."</p></div><div class="law-ref">Aligarh College 1875 â†’ AMU â†’ Muslim political awareness â†’ Two-Nation Theory â†’ Pakistan Movement</div></div>
+    </div>
+
+    <div class="q-card" data-sec="3"><div class="q-head" ><div class="q-badge" style="background:rgba(245,158,11,0.12);color:#fbbf24">3</div><div class="q-info"><div class="q-category" style="color:#fbbf24">All India Muslim League</div><div class="q-text">"When and why was the All India Muslim League formed?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Founded:</strong> "30 December 1906 at Dhaka â€” All India Muhammadan Educational Conference. Nawab Salimullah Khan instrumental."</p><p><strong>Why:</strong> "Simla Deputation 1906 â€” 35 Muslim leaders met Viceroy Minto to seek separate electorates, recognizing Muslim interests could not be protected in joint Hindu-majority electorate."</p><p><strong>Significance:</strong> "Muslim League became the vehicle through which Quaid-e-Azam led the movement for Pakistan."</p></div><div class="law-ref">1906 Simla Deputation â†’ Muslim League founded Dhaka â†’ Separate electorates â†’ Lahore Resolution 1940 â†’ Pakistan 1947</div></div>
+    </div>
+
+    <div class="q-card" data-sec="3"><div class="q-head" ><div class="q-badge" style="background:rgba(245,158,11,0.12);color:#fbbf24">4</div><div class="q-info"><div class="q-category" style="color:#fbbf24">Allama Iqbal</div><div class="q-text">"What was Allama Iqbal's vision and what is the significance of the 1930 Allahabad Address?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Iqbal (1877â€“1938):</strong> "National poet, philosopher, barrister. His poetry awakened Muslim consciousness â€” 'Khudi' (selfhood) and 'Shaheen' (eagle) are signature concepts."</p><p><strong>Allahabad Address 1930:</strong> "Presidential address at Muslim League session in Allahabad â€” proposed a consolidated Muslim state in north-western India: Punjab, NWFP, Sindh, and Balochistan. This was the intellectual foundation of Pakistan."</p><p><strong>Iqbal-Quaid link:</strong> "Iqbal wrote to Jinnah urging him to return to India and lead the Muslim League. Called the spiritual founder of Pakistan."</p></div><div class="law-ref">Allahabad Address 1930 â†’ Concept of separate Muslim state â†’ Jinnah returns â†’ Lahore Resolution 1940</div></div>
+    </div>
+
+    <div class="q-card" data-sec="3"><div class="q-head" ><div class="q-badge" style="background:rgba(245,158,11,0.12);color:#fbbf24">5</div><div class="q-info"><div class="q-category" style="color:#fbbf24">Lahore Resolution 1940</div><div class="q-text">"What is the Lahore Resolution and why is 23 March celebrated as Pakistan Day?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer â€” Know this perfectly</div><div class="model-answer"><p><strong>Date &amp; Venue:</strong> "23 March 1940 â€” annual session of All India Muslim League at Minto Park (now Iqbal Park), Lahore. Presided over by Quaid-e-Azam Muhammad Ali Jinnah."</p><p><strong>Content:</strong> "Demanded independent states in north-western and eastern zones of India where Muslims were in majority â€” geographically contiguous, autonomous and sovereign."</p><p><strong>Why Pakistan Resolution:</strong> "Did not explicitly use 'Pakistan' (coined by Choudhry Rahmat Ali 1933) but formally resolved to create a separate homeland. 23 March celebrated as Pakistan Day."</p></div><div class="law-ref">23 March 1940 â†’ Lahore Resolution â†’ Formal demand for homeland â†’ Pakistan 14 August 1947</div></div>
+    </div>
+
+    <div class="q-card" data-sec="3"><div class="q-head" ><div class="q-badge" style="background:rgba(245,158,11,0.12);color:#fbbf24">6</div><div class="q-info"><div class="q-category" style="color:#fbbf24">Creation of Pakistan</div><div class="q-text">"How was Pakistan created? What was the Mountbatten Plan?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Mountbatten Plan 3 June 1947:</strong> "Lord Mountbatten announced partition of British India into two dominions â€” India and Pakistan â€” based on Muslim majority areas."</p><p><strong>Indian Independence Act 1947:</strong> "Passed by British Parliament. Came into force 14â€“15 August 1947."</p><p><strong>14 August 1947:</strong> "Pakistan independent. Quaid-e-Azam = first Governor-General. Liaquat Ali Khan = first Prime Minister."</p><p><strong>Radcliffe Award:</strong> "Sir Cyril Radcliffe drew the boundary line in just 5 weeks â€” leading to mass migration and communal violence."</p></div><div class="law-ref">Mountbatten Plan 3 June 1947 â†’ Independence Act â†’ 14 August 1947 â†’ Pakistan. Jinnah = 1st Governor-General.</div></div>
+    </div>
+
+    <div class="q-card" data-sec="3"><div class="q-head" ><div class="q-badge" style="background:rgba(245,158,11,0.12);color:#fbbf24">7</div><div class="q-info"><div class="q-category" style="color:#fbbf24">Constitutional History</div><div class="q-text">"Trace Pakistan's constitutional history from 1947 to 1973."</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Objectives Resolution (1949):</strong> "First constitutional landmark. Sovereignty belongs to Allah. Forms preamble of 1973 Constitution."</p><p><strong>1956 Constitution:</strong> "First constitution â€” Islamic Republic declared. Abrogated 1958 by General Ayub Khan's martial law."</p><p><strong>1962 Constitution:</strong> "Presidential system under Ayub. Basic Democracies. Abrogated 1969."</p><p><strong>1973 Constitution:</strong> "Current constitution. Parliamentary system. Passed unanimously 10 April 1973 under PM Bhutto. In force 14 August 1973. Amended 26 times including landmark 18th Amendment 2010."</p></div><div class="law-ref">1949 Objectives Res â†’ 1956 (1st Const.) â†’ 1962 (Presidential) â†’ 1973 (Current, in force 14 Aug 1973)</div></div>
+    </div>
+
+    <div class="q-card" data-sec="3"><div class="q-head" ><div class="q-badge" style="background:rgba(245,158,11,0.12);color:#fbbf24">8</div><div class="q-info"><div class="q-category" style="color:#fbbf24">1971 â€” East Pakistan</div><div class="q-text">"What happened in 1971 and what lessons does it hold?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer â€” Answer with maturity</div><div class="model-answer"><p><strong>Events:</strong> "1970 general elections â€” Awami League won majority in East Pakistan but was denied government. Civil conflict erupted. Indian military intervention. Pakistan Army surrendered 16 December 1971. East Pakistan became Bangladesh."</p><p><strong>Lessons:</strong> "(1) National unity requires equal treatment of all regions. (2) Political grievances ignored escalate into crises. (3) Armed forces must remain within constitutional role. (4) Federalism requires genuine power-sharing."</p><p><strong>Relevance to Balochistan:</strong> "Development must reach every citizen â€” especially in provinces like Balochistan."</p></div></div>
+    </div>
+
+    <div class="q-card" data-sec="3"><div class="q-head" ><div class="q-badge" style="background:rgba(245,158,11,0.12);color:#fbbf24">9</div><div class="q-info"><div class="q-category" style="color:#fbbf24">Z.A. Bhutto Era</div><div class="q-text">"What were Bhutto's major contributions and what was his fate?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Contributions:</strong> "Pakistan's first elected PM under 1973 Constitution. Gave Pakistan its current unanimous constitution. Nationalized key industries. 1974 Islamic Summit in Lahore. Initiated nuclear programme after India's 1974 test."</p><p><strong>End:</strong> "1977 election rigging allegations â†’ mass protests â†’ General Zia martial law â†’ Bhutto tried and hanged 4 April 1979."</p></div><div class="law-ref">1973 Constitution â†’ Bhutto PM â†’ Islamic Summit 1974 â†’ Zia Coup 1977 â†’ Bhutto executed 4 April 1979</div></div>
+    </div>
+
+    <div class="q-card" data-sec="3"><div class="q-head" ><div class="q-badge" style="background:rgba(245,158,11,0.12);color:#fbbf24">10</div><div class="q-info"><div class="q-category" style="color:#fbbf24">General Zia ul-Haq</div><div class="q-text">"What is the significance of General Zia ul-Haq's era?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Tenure:</strong> "1977â€“1988 â€” longest martial law in Pakistan. Died in plane crash 17 August 1988."</p><p><strong>Islamization:</strong> "Hudood Ordinances 1979, Zakat Ordinance, mandatory Islamic studies. 8th Amendment â€” gave President power to dissolve Parliament."</p><p><strong>Afghan Jihad:</strong> "Pakistan became frontline state in Cold War â€” supported Afghan Mujahideen. Led to refugee influx, weapons proliferation, long-term security consequences."</p></div></div>
+    </div>
+
+    <div class="q-card" data-sec="3"><div class="q-head" ><div class="q-badge" style="background:rgba(245,158,11,0.12);color:#fbbf24">11</div><div class="q-info"><div class="q-category" style="color:#fbbf24">18th Amendment</div><div class="q-text">"What was the 18th Amendment (2010) and why is it important for Balochistan?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer â€” Know this cold</div><div class="model-answer"><p><strong>What:</strong> "Passed unanimously April 2010 under PM Gilani â€” largest constitutional reform in Pakistan's history."</p><p><strong>Key changes:</strong> "Abolished Concurrent Legislative List. Transferred 47 subjects to provinces â€” education, health, services. Restored parliamentary system. NWFP renamed Khyber Pakhtunkhwa."</p><p><strong>Balochistan impact:</strong> "Provinces gained fiscal and legislative autonomy. Balochistan can legislate on services. 7th NFC Award alongside 18th Amendment transformed provincial finance."</p></div><div class="law-ref">18th Amendment 2010 â†’ 47 subjects devolved â†’ Provincial autonomy â†’ BPSC and provincial institutions strengthened</div></div>
+    </div>
+
+    <div class="q-card" data-sec="3"><div class="q-head" ><div class="q-badge" style="background:rgba(245,158,11,0.12);color:#fbbf24">12</div><div class="q-info"><div class="q-category" style="color:#fbbf24">CPEC &amp; Modern Pakistan</div><div class="q-text">"What is CPEC and what is its significance for Balochistan?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>CPEC:</strong> "China-Pakistan Economic Corridor â€” ~$62 billion infrastructure and energy framework under China's Belt and Road Initiative. Connects Kashgar in China to Gwadar port in Balochistan."</p><p><strong>Balochistan significance:</strong> "Gwadar â€” deep-sea port in Makran â€” is CPEC's southern terminus. Balochistan is Pakistan's economic gateway. Infrastructure, energy, and Special Economic Zones are transforming the region."</p><p><strong>Reko Diq:</strong> "$7 billion copper-gold project â€” one of world's largest â€” operational by 2028. Transformational for provincial revenue."</p></div><div class="law-ref">CPEC ~$62B Â· Kashgar to Gwadar Â· Reko Diq $7B (copper-gold) Â· Gwadar Free Zone operational</div></div>
+    </div>
+  </div>
+  <!-- MODULE 4: ISLAMIC STUDIES -->
+  <div class="section-page" id="s4">
+    <div class="sec-hero" style="border-color:rgba(39,160,90,0.2)">
+      <div class="sec-eyebrow" style="color:var(--em-l)">Module 04 Â· ~20 minutes Â· BPSC Universal Subject 2 of 3</div>
+      <div class="sec-title">Islamic Studies â€” Daily Life, History &amp; Caliphate</div>
+      <div class="sec-desc">The second of three universal BPSC subjects. Panels ask about Islamic history, the Caliphate, principles of governance in Islam, and daily Islamic life. These questions are asked to all candidates regardless of post.</div>
+      <div class="sec-chips"><span class="sec-chip" style="background:rgba(39,160,90,0.12);color:#6ee7b7">Mandatory BPSC Subject</span><span class="sec-chip" style="background:rgba(201,168,76,0.12);color:var(--gold)">10 Questions</span></div>
+    </div>
+    <div class="progress-tracker"><div class="pt-label">Islamic Studies progress</div><div class="pt-bar-bg"><div class="pt-bar-fill" id="pt4" style="width:0%"></div></div><div class="pt-count" id="pc4">0/10</div><button class="mock-btn secondary" data-action="mark-complete" data-sec="4" style="padding:3px 10px;font-size:11px;margin-left:auto" title="Mark all Islamic Studies questions as seen">âœ“ Mark done</button></div>
+
+    <div class="q-card" data-sec="4"><div class="q-head" ><div class="q-badge" style="background:rgba(39,160,90,0.12);color:#6ee7b7">1</div><div class="q-info"><div class="q-category" style="color:#6ee7b7">Five Pillars</div><div class="q-text">"What are the five pillars of Islam and their significance in daily life?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>1. Shahadah:</strong> "There is no god but Allah, and Muhammad (PBUH) is His messenger. Foundation of Muslim identity."</p><p><strong>2. Salah (5 daily prayers):</strong> "Fajr, Zuhr, Asr, Maghrib, Isha. Builds discipline, time-management, connection with Allah. Congregational prayer builds community."</p><p><strong>3. Zakat:</strong> "2.5% annual levy on savings above nisab. Redistributes wealth, reduces inequality, social solidarity."</p><p><strong>4. Sawm (Ramadan):</strong> "Month-long fast dawn to sunset. Builds self-discipline, empathy for the poor, gratitude."</p><p><strong>5. Hajj:</strong> "Once in a lifetime for those with means. Annual pilgrimage to Makkah. Demonstrates equality of all Muslims â€” no distinction of race, wealth, or rank before Allah."</p></div></div>
+    </div>
+
+    <div class="q-card" data-sec="4"><div class="q-head" ><div class="q-badge" style="background:rgba(39,160,90,0.12);color:#6ee7b7">2</div><div class="q-info"><div class="q-category" style="color:#6ee7b7">Prophet's Life</div><div class="q-text">"Give a brief account of the life of the Holy Prophet (PBUH) and his role as a statesman."</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Birth &amp; early life:</strong> "Born 570 CE in Makkah. Orphaned early. Known as Al-Amin (The Trustworthy) â€” a title earned before prophethood."</p><p><strong>Prophethood:</strong> "First revelation at age 40 in Cave Hira, 610 CE. Began preaching monotheism, social justice, and equality."</p><p><strong>Hijra 622 CE:</strong> "Migration from Makkah to Madinah â€” marks the start of Islamic Calendar. Established first Islamic state in Madinah."</p><p><strong>As Statesman:</strong> "Charter of Madinah 622 CE â€” one of history's earliest written constitutions, granting rights to all citizens including non-Muslims. Conquered Makkah 630 CE without bloodshed. Passed away 632 CE in Madinah."</p></div><div class="law-ref">Born 570 CE â†’ Revelation 610 CE â†’ Hijra 622 CE â†’ Charter of Madinah â†’ Makkah 630 CE â†’ Passed 632 CE</div></div>
+    </div>
+
+    <div class="q-card" data-sec="4"><div class="q-head" ><div class="q-badge" style="background:rgba(39,160,90,0.12);color:#6ee7b7">3</div><div class="q-info"><div class="q-category" style="color:#6ee7b7">Khulafa Rashideen</div><div class="q-text">"Who were the Khulafa Rashideen? What is the significance of the Rightly Guided Caliphate?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer â€” Know all four clearly</div><div class="model-answer"><p><strong>1. Hazrat Abu Bakr Siddiq (RA) â€” 632â€“634 CE:</strong> "First Caliph. Suppressed apostasy (Riddah wars). Compiled Holy Quran into one volume."</p><p><strong>2. Hazrat Umar ibn Khattab (RA) â€” 634â€“644 CE:</strong> "Greatest administrative caliph. Created Diwan (government registry), established judiciary, introduced Islamic calendar, conquered Persia, Egypt, Palestine. Known for justice and simplicity."</p><p><strong>3. Hazrat Uthman ibn Affan (RA) â€” 644â€“656 CE:</strong> "Standardized the Quran â€” Mushaf Uthmani. Expanded naval power. Martyred 656 CE."</p><p><strong>4. Hazrat Ali ibn Abi Talib (RA) â€” 656â€“661 CE:</strong> "Fourth Caliph, cousin and son-in-law of the Prophet. First civil strife (Fitna). Martyred 661 CE."</p><p><strong>Significance:</strong> "Khulafa Rashideen represent Islamic governance at its ideal â€” accountability, consultation (Shura), justice, service to citizens."</p></div><div class="law-ref">Abu Bakr (632) â†’ Umar (634) â†’ Uthman (644) â†’ Ali (656) â†’ Rashideen ends 661 CE â†’ Umayyad begins</div></div>
+    </div>
+
+    <div class="q-card" data-sec="4"><div class="q-head" ><div class="q-badge" style="background:rgba(39,160,90,0.12);color:#6ee7b7">4</div><div class="q-info"><div class="q-category" style="color:#6ee7b7">Quran &amp; Hadith</div><div class="q-text">"What is the difference between the Quran and Hadith? What is their role as sources of Islamic law?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Quran:</strong> "Word of Allah â€” revealed over 23 years through Angel Jibreel. Primary and supreme source of Islamic law. 114 Surahs, 6,236 verses."</p><p><strong>Hadith:</strong> "Recorded sayings, actions, and approvals of the Prophet (PBUH). Second source of Islamic law. Major collections: Bukhari, Muslim, Abu Dawud, Tirmidhi, Ibn Majah, Nasa'i â€” Kutub al-Sittah."</p><p><strong>Sources hierarchy:</strong> "Quran â†’ Sunnah/Hadith â†’ Ijma (scholarly consensus) â†’ Qiyas (analogical reasoning)."</p><p><strong>Pakistan context:</strong> "Article 227: all laws must conform to Quran and Sunnah. Federal Shariat Court enforces this."</p></div><div class="law-ref">Quran (primary) â†’ Hadith (secondary) â†’ Ijma â†’ Qiyas. Article 227 Pakistan Constitution.</div></div>
+    </div>
+
+    <div class="q-card" data-sec="4"><div class="q-head" ><div class="q-badge" style="background:rgba(39,160,90,0.12);color:#6ee7b7">5</div><div class="q-info"><div class="q-category" style="color:#6ee7b7">Islamic Governance</div><div class="q-text">"What are the principles of governance in Islam and how do they apply to a public servant?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer â€” Connect directly to your role</div><div class="model-answer"><p><strong>Shura (Consultation):</strong> "Decision through consultation â€” Quran 42:38. A good officer consults before acting."</p><p><strong>Adl (Justice):</strong> "Absolute justice â€” Quran 4:135. Public servant must treat every citizen equally, without bias."</p><p><strong>Amanah (Trust):</strong> "Public office is a sacred trust from Allah and the people â€” Quran 4:58. Corruption betrays this trust."</p><p><strong>Accountability:</strong> "Hazrat Umar (RA): 'If a dog dies hungry on the banks of the Euphrates, Umar will be responsible.' Public servants are accountable for every citizen's welfare."</p><p><strong>Application:</strong> "As a BPSC officer, every act of service fulfills the Islamic concept of amanah."</p></div><div class="law-ref">Shura + Adl + Amanah = Islamic governance triad. Directly applicable to civil service conduct.</div></div>
+    </div>
+
+    <div class="q-card" data-sec="4"><div class="q-head" ><div class="q-badge" style="background:rgba(39,160,90,0.12);color:#6ee7b7">6</div><div class="q-info"><div class="q-category" style="color:#6ee7b7">Umayyad &amp; Abbasid</div><div class="q-text">"Briefly describe the Umayyad and Abbasid Caliphates and their contributions."</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Umayyad (661â€“750 CE):</strong> "Founded by Muawiyah. Capital: Damascus. Greatest expansion â€” Spain to Central Asia. Arabic as official language."</p><p><strong>Abbasid (750â€“1258 CE):</strong> "Capital: Baghdad. Golden Age of Islamic civilization â€” Bayt al-Hikmah (House of Wisdom), Al-Khwarizmi (Algebra), Ibn Sina (Avicenna), Ibn Rushd (Averroes). Advances in mathematics, medicine, astronomy."</p><p><strong>Fall:</strong> "Abbasid Caliphate ended with Mongol sack of Baghdad by Hulagu Khan, 1258 CE."</p></div><div class="law-ref">Umayyad 661â€“750 (Damascus) â†’ Abbasid 750â€“1258 (Baghdad, Golden Age) â†’ Mongols 1258 CE</div></div>
+    </div>
+
+    <div class="q-card" data-sec="4"><div class="q-head" ><div class="q-badge" style="background:rgba(39,160,90,0.12);color:#6ee7b7">7</div><div class="q-info"><div class="q-category" style="color:#6ee7b7">Pakistan as Islamic Republic</div><div class="q-text">"How does Pakistan's Constitution define its Islamic identity?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Preamble â€” Objectives Resolution 1949:</strong> "Sovereignty belongs to Allah Almighty alone. State exercises delegated powers."</p><p><strong>Article 1:</strong> "Pakistan is the Islamic Republic of Pakistan."</p><p><strong>Article 2:</strong> "Islam shall be the State Religion of Pakistan."</p><p><strong>Article 227:</strong> "All laws must conform to Quran and Sunnah."</p><p><strong>Federal Shariat Court:</strong> "Examines whether laws are repugnant to Islam. Council of Islamic Ideology advises Parliament."</p></div><div class="law-ref">Art.1 (Islamic Republic) + Art.2 (State Religion) + Art.227 (laws conform to Quran &amp; Sunnah)</div></div>
+    </div>
+
+    <div class="q-card" data-sec="4"><div class="q-head" ><div class="q-badge" style="background:rgba(39,160,90,0.12);color:#6ee7b7">8</div><div class="q-info"><div class="q-category" style="color:#6ee7b7">Zakat System</div><div class="q-text">"What is Zakat and how is it administered in Pakistan?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Definition:</strong> "Third pillar of Islam â€” 2.5% annual levy on wealth above nisab held for one lunar year. Fard (obligatory) for eligible Muslims."</p><p><strong>8 categories (Quran 9:60):</strong> "Fuqara (poor), Masakin (needy), collectors, new Muslims, those in debt, for Allah's cause, wayfarers, freeing slaves."</p><p><strong>Pakistan system:</strong> "Zakat &amp; Ushr Ordinance 1980 â€” deducted from bank savings on 1st Ramadan. Distributed: Central Zakat Fund â†’ Provincial â†’ District â†’ Local Zakat Committee."</p><p><strong>Ushr:</strong> "10% (5% if irrigated) on agricultural produce."</p></div><div class="law-ref">Zakat = 2.5% on savings above nisab. Zakat &amp; Ushr Ordinance 1980. 8 categories â€” Quran 9:60.</div></div>
+    </div>
+
+    <div class="q-card" data-sec="4"><div class="q-head" ><div class="q-badge" style="background:rgba(39,160,90,0.12);color:#6ee7b7">9</div><div class="q-info"><div class="q-category" style="color:#6ee7b7">Riba &amp; Islamic Banking</div><div class="q-text">"What does Islam say about Riba (interest) and what is Islamic banking?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Riba:</strong> "Quran absolutely prohibits Riba (usury/interest) â€” Surah Al-Baqarah 2:275-279. Declared a war against Allah and His Messenger."</p><p><strong>Rationale:</strong> "Interest exploits borrowers, concentrates wealth. Islam promotes risk-sharing (partnership) instead."</p><p><strong>Islamic Banking instruments:</strong> "Murabaha (cost-plus), Musharakah (partnership), Mudarabah (profit-sharing), Ijarah (leasing), Sukuk (Islamic bonds)."</p><p><strong>Pakistan:</strong> "SBP has Islamic Banking Department. All major banks have Islamic windows. Pakistan's courts have directed transition to interest-free economy."</p></div></div>
+    </div>
+
+    <div class="q-card" data-sec="4"><div class="q-head" ><div class="q-badge" style="background:rgba(39,160,90,0.12);color:#6ee7b7">10</div><div class="q-info"><div class="q-category" style="color:#6ee7b7">Concept of Jihad</div><div class="q-text">"What is the correct Islamic concept of Jihad? How does a civil servant understand it?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer â€” Answer with knowledge and balance</div><div class="model-answer"><p><strong>Literal meaning:</strong> "Striving or effort â€” from Arabic root 'jahada.'"</p><p><strong>Types:</strong> "Jihad al-Nafs (struggle against one's ego â€” the 'greater jihad'). Jihad bil Qalb (struggle of heart against evil). Jihad bil Lisan (speaking truth). Jihad bil Yad (action). Qital (fighting in defense â€” 'lesser jihad') â€” strictly regulated by legitimate authority, protecting civilians."</p><p><strong>Civil servant application:</strong> "As a public servant, your jihad is to serve with honesty, resist corruption, and work diligently for the people of Balochistan. That is jihad bil yad â€” striving through righteous action."</p></div></div>
+    </div>
+  </div>
+  <!-- MODULE 5: CURRENT AFFAIRS -->
+  <div class="section-page" id="s5">
+    <div class="sec-hero" style="border-color:rgba(8,145,178,0.2)">
+      <div class="sec-eyebrow" style="color:#67e8f9">Module 05 Â· ~20 minutes Â· BPSC Universal Subject 3 of 3</div>
+      <div class="sec-title">Current Affairs â€” Pakistan &amp; Balochistan Focus</div>
+      <div class="sec-desc">The third universal BPSC subject. Panels expect you to know what is happening in Pakistan and Balochistan today. These questions test awareness, analytical thinking, and whether you are engaged with the world you want to serve.</div>
+      <div class="sec-chips"><span class="sec-chip" style="background:rgba(8,145,178,0.12);color:#67e8f9">Mandatory BPSC Subject</span><span class="sec-chip" style="background:rgba(201,168,76,0.12);color:var(--gold)">10 Questions</span></div>
+    </div>
+    <div class="progress-tracker"><div class="pt-label">Current Affairs progress</div><div class="pt-bar-bg"><div class="pt-bar-fill" id="pt5" style="width:0%"></div></div><div class="pt-count" id="pc5">0/10</div><button class="mock-btn secondary" data-action="mark-complete" data-sec="5" style="padding:3px 10px;font-size:11px;margin-left:auto" title="Mark all current affairs questions as seen">âœ“ Mark done</button></div>
+
+    <div class="q-card" data-sec="5"><div class="q-head" ><div class="q-badge" style="background:rgba(8,145,178,0.12);color:#67e8f9">1</div><div class="q-info"><div class="q-category" style="color:#67e8f9">Pakistan Economy</div><div class="q-text">"What is Pakistan's current economic situation and the IMF programme's role?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Situation:</strong> "Pakistan faces high inflation, fiscal deficit, and heavy debt burden. IMF Extended Fund Facility (EFF) is the key support programme."</p><p><strong>IMF conditions:</strong> "Fiscal consolidation, tax base broadening, energy sector reforms, reducing subsidies, raising tax-to-GDP from ~9% toward 13â€“15%."</p><p><strong>Tax-to-GDP ~9â€“10%</strong> â€” far below OECD average of ~34%.</p><p><strong>Balochistan:</strong> "Depends heavily on NFC transfers (~80%+ of revenue). Strengthening own-source revenue and CPEC-linked investment is essential."</p></div><div class="law-ref">Tax-to-GDP ~9â€“10% | IMF EFF Programme | NFC transfers = 80%+ of Balochistan revenue | CPEC = development anchor</div></div>
+    </div>
+
+    <div class="q-card" data-sec="5"><div class="q-head" ><div class="q-badge" style="background:rgba(8,145,178,0.12);color:#67e8f9">2</div><div class="q-info"><div class="q-category" style="color:#67e8f9">Balochistan Development</div><div class="q-text">"What are the major development challenges and opportunities in Balochistan today?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Challenges:</strong> "Literacy ~46% (below national ~58%). Health sparse â€” ~1 doctor per 5,000+ rural residents. Water scarcity â€” arid province, Quetta Valley groundwater depleting. Vast distances, limited roads. Security concerns."</p><p><strong>Opportunities:</strong> "CPEC and Gwadar â€” transformational. Reko Diq copper-gold ($7B, operational 2028) â€” one of world's largest. Natural gas, renewable energy (solar, wind), marine resources."</p><p><strong>Governance role:</strong> "Development requires honest, capable officers at every level â€” that is precisely what BPSC recruits."</p></div><div class="law-ref">Reko Diq $7B Â· Gwadar Free Zone operational Â· 18th Amendment enabled autonomy Â· BPSC = development backbone</div></div>
+    </div>
+
+    <div class="q-card" data-sec="5"><div class="q-head" ><div class="q-badge" style="background:rgba(8,145,178,0.12);color:#67e8f9">3</div><div class="q-info"><div class="q-category" style="color:#67e8f9">NFC Award</div><div class="q-text">"What is the NFC Award and why does Balochistan argue for a greater share?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer â€” Know the figures</div><div class="model-answer"><p><strong>NFC Award (Article 160):</strong> "National Finance Commission distributes divisible pool taxes. 7th NFC Award 2009 gives 57.5% to provinces."</p><p><strong>Distribution criteria:</strong> "Population 82%, poverty/backwardness 10.3%, revenue generation 5%, inverse population density 2.7%."</p><p><strong>Balochistan share ~9.09%.</strong></p><p><strong>Balochistan's argument:</strong> "Covers 44% of Pakistan's land but receives only 9% of NFC funds. Backwardness and area criteria should carry more weight. Province supplies natural gas nationally but received inadequate development funding historically."</p><p><strong>8th NFC:</strong> "Overdue since 2015. Balochistan advocates area-weighted formula."</p></div><div class="law-ref">7th NFC 2009: 57.5% to provinces. Balochistan ~9.09%. 8th NFC overdue. Article 160.</div></div>
+    </div>
+
+    <div class="q-card" data-sec="5"><div class="q-head" ><div class="q-badge" style="background:rgba(8,145,178,0.12);color:#67e8f9">4</div><div class="q-info"><div class="q-category" style="color:#67e8f9">Pakistan Foreign Policy</div><div class="q-text">"What are Pakistan's key foreign policy priorities today?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>China:</strong> "Pakistan's all-weather strategic partner. CPEC is the economic backbone. Defense and diplomatic coordination strong."</p><p><strong>USA:</strong> "Complex relationship. Counterterrorism cooperation continues alongside economic partnership."</p><p><strong>India:</strong> "Relations tense â€” Kashmir dispute unresolved. Trade suspended. Pakistan advocates UN resolutions on Kashmir."</p><p><strong>Afghanistan:</strong> "2,640 km shared border. TTP cross-border terrorism critical security concern."</p><p><strong>SCO:</strong> "Pakistan is full member of Shanghai Cooperation Organisation â€” expanding regional engagement."</p></div></div>
+    </div>
+
+    <div class="q-card" data-sec="5"><div class="q-head" ><div class="q-badge" style="background:rgba(8,145,178,0.12);color:#67e8f9">5</div><div class="q-info"><div class="q-category" style="color:#67e8f9">Climate Change</div><div class="q-text">"How does climate change affect Pakistan and particularly Balochistan?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Pakistan's vulnerability:</strong> "Contributes less than 1% of global emissions but among 10 most climate-vulnerable countries. 2022 mega-floods submerged one-third of Pakistan, affected 33 million people."</p><p><strong>Balochistan specific:</strong> "Increasing drought frequency. Quetta Valley groundwater depleting rapidly. Flash floods in Makran. Desertification expanding."</p><p><strong>Response:</strong> "10 Billion Tree Tsunami. National Climate Change Policy 2021. Bonn Challenge commitments."</p><p><strong>Civil service role:</strong> "Climate adaptation requires local governance â€” disaster preparedness, water management, agricultural support."</p></div></div>
+    </div>
+
+    <div class="q-card" data-sec="5"><div class="q-head" ><div class="q-badge" style="background:rgba(8,145,178,0.12);color:#67e8f9">6</div><div class="q-info"><div class="q-category" style="color:#67e8f9">Education Crisis</div><div class="q-text">"What is Pakistan's education crisis and what reforms are needed?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Scale:</strong> "~26 million out-of-school children â€” world's second highest. Literacy ~58% nationally, ~46% in Balochistan."</p><p><strong>Challenges:</strong> "Ghost schools and ghost teachers. Gender gap in Balochistan. Quality poor even where schools exist."</p><p><strong>Reforms:</strong> "Biometric teacher attendance. Result-based monitoring. Girls' schools with female teachers. Scholarships for rural students."</p><p><strong>Constitutional basis:</strong> "Article 25A â€” free compulsory education for ages 5â€“16."</p></div><div class="law-ref">Article 25A: free education 5â€“16 yrs. 26M out-of-school children. Balochistan literacy ~46%.</div></div>
+    </div>
+
+    <div class="q-card" data-sec="5"><div class="q-head" ><div class="q-badge" style="background:rgba(8,145,178,0.12);color:#67e8f9">7</div><div class="q-info"><div class="q-category" style="color:#67e8f9">Security Situation</div><div class="q-text">"What is Pakistan's current security situation regarding terrorism?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer â€” Answer factually and calmly</div><div class="model-answer"><p><strong>TTP:</strong> "Tehrik-e-Taliban Pakistan â€” primary terrorism threat, operating from Afghan soil. Pakistan has conducted operations: Zarb-e-Azb, Radd-ul-Fasaad."</p><p><strong>Balochistan:</strong> "BLA and allied groups conduct attacks. Intelligence-based operations (IBOs) are the current counter-strategy."</p><p><strong>National Action Plan:</strong> "20-point NAP 2015 â€” post-APS Peshawar attack framework."</p><p><strong>Development link:</strong> "Security and development are inseparable. Genuine development â€” jobs, education, governance â€” is the most sustainable counter-extremism strategy."</p></div></div>
+    </div>
+
+    <div class="q-card" data-sec="5"><div class="q-head" ><div class="q-badge" style="background:rgba(8,145,178,0.12);color:#67e8f9">8</div><div class="q-info"><div class="q-category" style="color:#67e8f9">Water Crisis</div><div class="q-text">"Pakistan is facing a severe water crisis. What are the causes and solutions?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Status:</strong> "Pakistan is below the water stress threshold (1,000 mÂ³/person/year). Tarbela and Mangla dams at declining storage capacity."</p><p><strong>Causes:</strong> "Population growth, 90% of water goes to agriculture, lack of storage, glacial melt, flood irrigation dominance, groundwater depletion."</p><p><strong>Balochistan:</strong> "Karez (underground canal) systems drying up. Quetta Valley groundwater critically depleted."</p><p><strong>Solutions:</strong> "Diamer-Bhasha Dam. Drip and sprinkler irrigation. Water pricing reform. Mohmand Dam. Rainwater harvesting."</p></div><div class="law-ref">Below 1,000 mÂ³/person = water stressed. Diamer-Bhasha Dam under construction. Quetta Valley critically depleted.</div></div>
+    </div>
+
+    <div class="q-card" data-sec="5"><div class="q-head" ><div class="q-badge" style="background:rgba(8,145,178,0.12);color:#67e8f9">9</div><div class="q-info"><div class="q-category" style="color:#67e8f9">Digital Pakistan</div><div class="q-text">"How is Pakistan progressing on digital transformation and e-governance?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>NADRA:</strong> "World-class digital identity â€” 120+ million CNICs. Biometric verification used across sectors."</p><p><strong>FBR:</strong> "IRIS digital filing. Track and trace for tobacco and sugar. Digital invoicing expansion."</p><p><strong>Balochistan:</strong> "B-RAAST for digital payments. Balochistan Land Record Authority. Smart Quetta initiatives. Connectivity remains a challenge in rural areas."</p><p><strong>Opportunity:</strong> "Digital governance reduces corruption by eliminating human discretion in routine transactions â€” transformational for Balochistan's development."</p></div></div>
+    </div>
+
+    <div class="q-card" data-sec="5"><div class="q-head" ><div class="q-badge" style="background:rgba(8,145,178,0.12);color:#67e8f9">10</div><div class="q-info"><div class="q-category" style="color:#67e8f9">Women Empowerment</div><div class="q-text">"What is the state of women's empowerment in Pakistan and Balochistan?"</div></div><div class="q-toggle">â–¾</div></div>
+      <div class="q-body"><div class="answer-label">â­ Model Answer</div><div class="model-answer"><p><strong>Constitutional guarantee:</strong> "Article 25(2): no discrimination on basis of sex. Article 34: full participation of women in national life. 33% reserved seats in local governments."</p><p><strong>Progress:</strong> "Women in judiciary, parliament (reserved + direct seats), FPSC and BPSC selections increasing."</p><p><strong>Balochistan challenges:</strong> "Female literacy ~29% (among Pakistan's lowest). Cultural barriers to girls' education. Shortage of female teachers and health workers."</p><p><strong>As civil servant:</strong> "Treat every citizen â€” man or woman â€” with equal dignity and service under Article 25."</p></div></div>
+    </div>
+  </div>
+  <!-- MODULE 6: MOCK INTERVIEW -->
+  <div class="section-page" id="s6">
+    <div class="sec-hero" style="border-color:rgba(201,168,76,0.25)">
+      <div class="sec-eyebrow" style="color:var(--gold)">Module 06 Â· ~25 minutes Â· Full Simulation</div>
+      <div class="sec-title">Live Mock Interview â€” BPSC Panel Simulation</div>
+      <div class="sec-desc">The panel is in front of you. Type your answers as you would speak them. Get instant AI feedback scored on content, knowledge depth, and delivery. All 3 universal BPSC subjects are covered in this simulation.</div>
+      <div class="sec-chips">
+        <span class="sec-chip" style="background:rgba(201,168,76,0.12);color:var(--gold)">10 Panel Questions</span>
+        <span class="sec-chip" style="background:rgba(39,160,90,0.12);color:#6ee7b7">AI Scoring Engine</span>
+        <span class="sec-chip" style="background:rgba(8,145,178,0.12);color:#67e8f9">All 3 Universal Subjects</span>
+      </div>
+    </div>
+
+    <div id="mock-complete-banner" style="display:none" class="completion-banner">
+      <h3>ðŸ† Mock Interview Complete!</h3>
+      <p>You have answered all panel questions. Review any question below. You are ready for your BPSC interview.</p>
+      <div class="completion-score">
+        <div class="cs-item"><div class="cs-num" id="cs-answered">0</div><div class="cs-label">Answered</div></div>
+        <div class="cs-item"><div class="cs-num" id="cs-score">â€”</div><div class="cs-label">Avg Score</div></div>
+        <div class="cs-item"><div class="cs-num">10</div><div class="cs-label">Total Qs</div></div>
+      </div>
+    </div>
+
+    <div class="mock-arena" id="mock-arena">
+      <div class="mock-top">
+        <div class="interviewer-avatar">ðŸ§‘â€âš–ï¸</div>
+        <div>
+          <div class="interviewer-name" id="mock-panel-name">BPSC Selection Board</div>
+          <div class="interviewer-role">Chairman Â· Senior Member Â· Departmental Representative</div>
+        </div>
+        <div class="live-badge"><span class="live-dot"></span>LIVE SESSION</div>
+      </div>
+      <div class="mock-body">
+        <div class="mock-counter" id="mock-counter"></div>
+        <div class="current-q-box">
+          <div class="cq-label">Panel Question <span id="mock-qnum">1</span> of 10</div>
+          <div class="cq-text" id="mock-q-text">Preparing your session...</div>
+        </div>
+        <textarea class="mock-textarea" id="mock-answer" placeholder="Type your answer here as you would speak it in the interview room. Be clear, specific, and confident. Aim for 4â€“6 sentences with relevant facts, dates, or examples where applicable."></textarea>
+        <div class="mock-btn-row">
+          <button class="mock-btn primary" id="submit-btn">Submit Answer â†—</button>
+          <button class="mock-btn secondary" data-action="skip-mock">Skip â†’</button>
+        </div>
+        <div class="ai-loading" id="ai-loading"><div class="ai-spinner"></div><span id="ai-loading-text">Panel is evaluating your answer...</span></div>
+        <div class="feedback-box" id="mock-feedback">
+          <div class="fb-score"><div class="fb-stars" id="fb-stars">â­â­â­</div><div class="fb-label" id="fb-label">Good answer!</div></div>
+          <div class="score-bar-wrap">
+            <div class="score-bar-label"><span>Answer Score</span><span id="score-pct">0%</span></div>
+            <div class="score-bar-bg"><div class="score-bar-fill" id="score-bar"></div></div>
+          </div>
+          <div class="fb-text" id="fb-text"></div>
+          <button class="model-toggle" data-action="toggle-model">â–¼ See model answer</button>
+          <div class="model-ans-reveal" id="model-ans-reveal"></div>
+          <div style="margin-top:.9rem">
+            <button class="mock-btn primary" data-action="next-mock">Next Question â†’</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE 7: CHEAT SHEET -->
+  <div class="section-page" id="s7">
+    <div class="sec-hero" style="border-color:rgba(124,58,237,0.2)">
+      <div class="sec-eyebrow" style="color:#a78bfa">Module 07 Â· ~10 minutes Â· Memorize These</div>
+      <div class="sec-title">The Final Cheat Sheet â€” Key Facts, Dates &amp; Phrases</div>
+      <div class="sec-desc">Read through this the night before, and again the morning of your interview. These are the exact figures, dates, and power phrases that impress BPSC panels. Know these cold.</div>
+    </div>
+    <div class="cheat-grid">
+      <div class="cheat-card">
+        <div class="cheat-title">ðŸ›ï¸ Pakistan Key Dates</div>
+        <div class="cheat-row"><div class="cheat-key">14 August 1947</div><div class="cheat-val">Pakistan Independence</div></div>
+        <div class="cheat-row"><div class="cheat-key">23 March 1940</div><div class="cheat-val">Lahore (Pakistan) Resolution</div></div>
+        <div class="cheat-row"><div class="cheat-key">14 August 1973</div><div class="cheat-val">1973 Constitution in force</div></div>
+        <div class="cheat-row"><div class="cheat-key">10 April 1949</div><div class="cheat-val">Objectives Resolution</div></div>
+        <div class="cheat-row"><div class="cheat-key">April 2010</div><div class="cheat-val">18th Constitutional Amendment</div></div>
+        <div class="cheat-row"><div class="cheat-key">16 December 1971</div><div class="cheat-val">Fall of Dhaka / Bangladesh</div></div>
+        <div class="cheat-row"><div class="cheat-key">30 December 1906</div><div class="cheat-val">Muslim League founded, Dhaka</div></div>
+        <div class="cheat-row"><div class="cheat-key">3 June 1947</div><div class="cheat-val">Mountbatten (Partition) Plan</div></div>
+        <div class="cheat-row"><div class="cheat-key">1875</div><div class="cheat-val">Aligarh College founded</div></div>
+        <div class="cheat-row"><div class="cheat-key">1930</div><div class="cheat-val">Iqbal's Allahabad Address</div></div>
+        <div class="cheat-row"><div class="cheat-key">4 April 1979</div><div class="cheat-val">Bhutto executed</div></div>
+        <div class="cheat-row"><div class="cheat-key">17 August 1988</div><div class="cheat-val">Zia plane crash death</div></div>
+      </div>
+      <div class="cheat-card">
+        <div class="cheat-title">ðŸ“œ Key Constitutional Articles</div>
+        <div class="cheat-row"><div class="cheat-key">Islamic Republic</div><div class="cheat-val">Article 1</div></div>
+        <div class="cheat-row"><div class="cheat-key">State Religion: Islam</div><div class="cheat-val">Article 2</div></div>
+        <div class="cheat-row"><div class="cheat-key">Rule of Law</div><div class="cheat-val">Article 4</div></div>
+        <div class="cheat-row"><div class="cheat-key">Right to life / liberty</div><div class="cheat-val">Article 9</div></div>
+        <div class="cheat-row"><div class="cheat-key">Fair trial &amp; due process</div><div class="cheat-val">Article 10A</div></div>
+        <div class="cheat-row"><div class="cheat-key">Dignity of person</div><div class="cheat-val">Article 14</div></div>
+        <div class="cheat-row"><div class="cheat-key">Equality before law</div><div class="cheat-val">Article 25</div></div>
+        <div class="cheat-row"><div class="cheat-key">Free education 5â€“16 yrs</div><div class="cheat-val">Article 25A</div></div>
+        <div class="cheat-row"><div class="cheat-key">Laws conform to Islam</div><div class="cheat-val">Article 227</div></div>
+        <div class="cheat-row"><div class="cheat-key">NFC Award</div><div class="cheat-val">Article 160</div></div>
+        <div class="cheat-row"><div class="cheat-key">High Court writs</div><div class="cheat-val">Article 199</div></div>
+        <div class="cheat-row"><div class="cheat-key">Local Government</div><div class="cheat-val">Article 140A</div></div>
+      </div>
+      <div class="cheat-card">
+        <div class="cheat-title">ðŸ“Š Pakistan Key Facts &amp; Figures</div>
+        <div class="cheat-row"><div class="cheat-key">Tax-to-GDP ratio</div><div class="cheat-val">~9â€“10%</div></div>
+        <div class="cheat-row"><div class="cheat-key">OECD avg Tax/GDP</div><div class="cheat-val">~34%</div></div>
+        <div class="cheat-row"><div class="cheat-key">Out-of-school children</div><div class="cheat-val">~26 million</div></div>
+        <div class="cheat-row"><div class="cheat-key">National literacy rate</div><div class="cheat-val">~58%</div></div>
+        <div class="cheat-row"><div class="cheat-key">Balochistan literacy</div><div class="cheat-val">~46% (female ~29%)</div></div>
+        <div class="cheat-row"><div class="cheat-key">Balochistan area share</div><div class="cheat-val">~44% of Pakistan</div></div>
+        <div class="cheat-row"><div class="cheat-key">Balochistan NFC share</div><div class="cheat-val">~9.09%</div></div>
+        <div class="cheat-row"><div class="cheat-key">7th NFC Award</div><div class="cheat-val">2009 Â· provinces get 57.5%</div></div>
+        <div class="cheat-row"><div class="cheat-key">CPEC investment</div><div class="cheat-val">~$62 billion</div></div>
+        <div class="cheat-row"><div class="cheat-key">Reko Diq project</div><div class="cheat-val">$7B Â· copper-gold Â· 2028</div></div>
+        <div class="cheat-row"><div class="cheat-key">Pakistan total area</div><div class="cheat-val">881,913 kmÂ²</div></div>
+        <div class="cheat-row"><div class="cheat-key">Zakat rate</div><div class="cheat-val">2.5% on savings above nisab</div></div>
+      </div>
+      <div class="cheat-card">
+        <div class="cheat-title">â˜ªï¸ Islamic History Quick Reference</div>
+        <div class="cheat-row"><div class="cheat-key">Prophet's birth</div><div class="cheat-val">570 CE Â· Makkah</div></div>
+        <div class="cheat-row"><div class="cheat-key">First revelation</div><div class="cheat-val">610 CE Â· Cave Hira</div></div>
+        <div class="cheat-row"><div class="cheat-key">Hijra to Madinah</div><div class="cheat-val">622 CE Â· Calendar starts</div></div>
+        <div class="cheat-row"><div class="cheat-key">Charter of Madinah</div><div class="cheat-val">622 CE Â· First constitution</div></div>
+        <div class="cheat-row"><div class="cheat-key">Conquest of Makkah</div><div class="cheat-val">630 CE</div></div>
+        <div class="cheat-row"><div class="cheat-key">Prophet's passing</div><div class="cheat-val">632 CE Â· Madinah</div></div>
+        <div class="cheat-row"><div class="cheat-key">Abu Bakr Siddiq (RA)</div><div class="cheat-val">632â€“634 Â· Quran compiled</div></div>
+        <div class="cheat-row"><div class="cheat-key">Umar ibn Khattab (RA)</div><div class="cheat-val">634â€“644 Â· Administration</div></div>
+        <div class="cheat-row"><div class="cheat-key">Uthman ibn Affan (RA)</div><div class="cheat-val">644â€“656 Â· Quran standardized</div></div>
+        <div class="cheat-row"><div class="cheat-key">Ali ibn Abi Talib (RA)</div><div class="cheat-val">656â€“661 Â· First civil conflict</div></div>
+        <div class="cheat-row"><div class="cheat-key">Umayyad Caliphate</div><div class="cheat-val">661â€“750 CE Â· Damascus</div></div>
+        <div class="cheat-row"><div class="cheat-key">Abbasid Â· Fall of Baghdad</div><div class="cheat-val">750â€“1258 CE Â· Mongols</div></div>
+      </div>
+      <div class="cheat-card" style="border-color:rgba(201,168,76,0.3)">
+        <div class="cheat-title" style="color:var(--gold)">ðŸŽ¯ Power Phrases for BPSC Panel</div>
+        <div class="cheat-row"><div class="cheat-key">On self-intro</div><div class="cheat-val">"...intersection of knowledge &amp; service"</div></div>
+        <div class="cheat-row"><div class="cheat-key">Why BPSC?</div><div class="cheat-val">"I want to serve â€” not just earn"</div></div>
+        <div class="cheat-row"><div class="cheat-key">On Balochistan</div><div class="cheat-val">"I am a son/daughter of this soil"</div></div>
+        <div class="cheat-row"><div class="cheat-key">On integrity</div><div class="cheat-val">"Loyalty first to law, then institution"</div></div>
+        <div class="cheat-row"><div class="cheat-key">On being fresh grad</div><div class="cheat-val">"No wrong habits to unlearn"</div></div>
+        <div class="cheat-row"><div class="cheat-key">On Islamic governance</div><div class="cheat-val">"Amanah â€” sacred trust from Allah"</div></div>
+        <div class="cheat-row"><div class="cheat-key">On CPEC</div><div class="cheat-val">"Transformational for Balochistan"</div></div>
+        <div class="cheat-row"><div class="cheat-key">When you don't know</div><div class="cheat-val">"Based on the principle, I believe..."</div></div>
+        <div class="cheat-row"><div class="cheat-key">On development</div><div class="cheat-val">"Security &amp; development are inseparable"</div></div>
+        <div class="cheat-row"><div class="cheat-key">On closing interview</div><div class="cheat-val">"Prepared specifically for this service"</div></div>
+      </div>
+      <div class="cheat-card">
+        <div class="cheat-title">âš¡ 60-Second Flash Drill â€” Read Aloud</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:.5rem">
+          <div style="padding:.6rem .75rem;background:rgba(201,168,76,0.06);border-radius:8px;font-size:12px;color:var(--text2)">Q: Pakistan Independence?<br><strong style="color:var(--text)">A: 14 August 1947</strong></div>
+          <div style="padding:.6rem .75rem;background:rgba(201,168,76,0.06);border-radius:8px;font-size:12px;color:var(--text2)">Q: Lahore Resolution?<br><strong style="color:var(--text)">A: 23 March 1940</strong></div>
+          <div style="padding:.6rem .75rem;background:rgba(201,168,76,0.06);border-radius:8px;font-size:12px;color:var(--text2)">Q: 1973 Constitution in force?<br><strong style="color:var(--text)">A: 14 August 1973</strong></div>
+          <div style="padding:.6rem .75rem;background:rgba(201,168,76,0.06);border-radius:8px;font-size:12px;color:var(--text2)">Q: Balochistan area share?<br><strong style="color:var(--text)">A: ~44% of Pakistan</strong></div>
+          <div style="padding:.6rem .75rem;background:rgba(201,168,76,0.06);border-radius:8px;font-size:12px;color:var(--text2)">Q: First Caliph?<br><strong style="color:var(--text)">A: Hazrat Abu Bakr Siddiq (RA)</strong></div>
+          <div style="padding:.6rem .75rem;background:rgba(201,168,76,0.06);border-radius:8px;font-size:12px;color:var(--text2)">Q: Islamic governance triad?<br><strong style="color:var(--text)">A: Shura Â· Adl Â· Amanah</strong></div>
+          <div style="padding:.6rem .75rem;background:rgba(201,168,76,0.06);border-radius:8px;font-size:12px;color:var(--text2)">Q: 18th Amendment?<br><strong style="color:var(--text)">A: 2010 Â· 47 subjects devolved</strong></div>
+          <div style="padding:.6rem .75rem;background:rgba(201,168,76,0.06);border-radius:8px;font-size:12px;color:var(--text2)">Q: Iqbal's Allahabad Address?<br><strong style="color:var(--text)">A: 1930 Â· separate Muslim state</strong></div>
+          <div style="padding:.6rem .75rem;background:rgba(201,168,76,0.06);border-radius:8px;font-size:12px;color:var(--text2)">Q: Balochistan NFC share?<br><strong style="color:var(--text)">A: ~9.09%</strong></div>
+          <div style="padding:.6rem .75rem;background:rgba(201,168,76,0.06);border-radius:8px;font-size:12px;color:var(--text2)">Q: Reko Diq project?<br><strong style="color:var(--text)">A: $7B copper-gold Â· 2028</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE 8: D-DAY STRATEGY -->
+  <div class="section-page" id="s8">
+    <div class="sec-hero" style="border-color:rgba(201,168,76,0.25)">
+      <div class="sec-eyebrow" style="color:var(--gold)">Module 08 Â· ~10 minutes Â· Final Preparation</div>
+      <div class="sec-title">D-Day Strategy â€” Walk In Like You Were Born For This</div>
+      <div class="sec-desc">Your answers get you 70% of the way. The other 30% is how you enter the room, how you sit, how you speak, and how you carry yourself. BPSC panels form their first impression within 60 seconds. Make yours count.</div>
+    </div>
+    <div class="countdown-box">
+      <div class="cd-icon">â°</div>
+      <div><div class="cd-title">Time Until Your Interview</div><div class="cd-sub" id="day-countdown">Calculating...</div></div>
+    </div>
+    <div class="bl-grid">
+      <div class="bl-card"><div class="bl-icon">ðŸ‘”</div><div class="bl-title">Dress Code</div><div class="bl-tip">Clean pressed shalwar kameez (white or light color) or formal suit. Polished shoes. Neat hair. Simple and professional wins over flashy.</div></div>
+      <div class="bl-card"><div class="bl-icon">ðŸš¶</div><div class="bl-title">Entry &amp; Posture</div><div class="bl-tip">Enter calmly. Greet: "Assalamu Alaikum / Good morning, respected panel." Walk with purpose. Sit only when invited. Sit upright â€” do not slouch.</div></div>
+      <div class="bl-card"><div class="bl-icon">ðŸ‘ï¸</div><div class="bl-title">Eye Contact</div><div class="bl-tip">Natural eye contact with the person asking. For longer answers, scan all panel members. Confident, not staring.</div></div>
+      <div class="bl-card"><div class="bl-icon">ðŸ—£ï¸</div><div class="bl-title">Voice &amp; Pace</div><div class="bl-tip">Speak at 70% of your normal speed â€” nerves make people rush. Pause 2 seconds before answering. A deliberate pause shows thoughtfulness.</div></div>
+      <div class="bl-card"><div class="bl-icon">ðŸ¤²</div><div class="bl-title">Hands &amp; Gestures</div><div class="bl-tip">Hands resting gently on table or lap. Mild natural gestures are fine. Do not fidget, tap fingers, or cross arms â€” these signal anxiety.</div></div>
+      <div class="bl-card"><div class="bl-icon">ðŸ˜Œ</div><div class="bl-title">When You Don't Know</div><div class="bl-tip">Say: "I don't have the exact figure, but based on my understanding..." or "I would verify, but the principle is..." Never bluff. Honesty impresses panels.</div></div>
+      <div class="bl-card"><div class="bl-icon">ðŸ§˜</div><div class="bl-title">Manage Nerves</div><div class="bl-tip">3 deep breaths before entering. The panel wants you to succeed. Your preparation tonight separates you from every unprepared candidate walking in tomorrow.</div></div>
+      <div class="bl-card"><div class="bl-icon">ðŸšª</div><div class="bl-title">Exit Gracefully</div><div class="bl-tip">When dismissed: "Thank you for this opportunity, respected panel." Rise calmly, push chair in gently, walk out with dignity. The interview ends when you leave the building.</div></div>
+    </div>
+    <div class="cheat-card" style="margin-bottom:1.25rem;border-color:rgba(201,168,76,0.2)">
+      <div class="cheat-title" style="color:var(--gold)">ðŸŒ™ Tonight's Prep Schedule</div>
+      <div class="cheat-row"><div class="cheat-key">Now â†’ +25 min</div><div class="cheat-val">Module 1: Self Introduction (aloud)</div></div>
+      <div class="cheat-row"><div class="cheat-key">+25 â†’ +55 min</div><div class="cheat-val">Module 2: Your Degree Questions</div></div>
+      <div class="cheat-row"><div class="cheat-key">+55 â†’ +80 min</div><div class="cheat-val">Module 3: Indo-Pak History</div></div>
+      <div class="cheat-row"><div class="cheat-key">+80 â†’ +100 min</div><div class="cheat-val">Module 4: Islamic Studies</div></div>
+      <div class="cheat-row"><div class="cheat-key">+100 â†’ +120 min</div><div class="cheat-val">Module 5: Current Affairs</div></div>
+      <div class="cheat-row"><div class="cheat-key">+120 â†’ +145 min</div><div class="cheat-val">Module 6: Full Mock Interview</div></div>
+      <div class="cheat-row"><div class="cheat-key">+145 â†’ +155 min</div><div class="cheat-val">Module 7: Cheat Sheet â€” memorize cold</div></div>
+      <div class="cheat-row"><div class="cheat-key">Before sleep</div><div class="cheat-val">Re-read Cheat Sheet one final time</div></div>
+      <div class="cheat-row"><div class="cheat-key">Morning of interview</div><div class="cheat-val">Cheat Sheet + practice intro in mirror</div></div>
+    </div>
+    <fieldset class="cheat-card" style="margin-bottom:1.25rem;border-color:rgba(201,168,76,0.2);border-radius:14px;padding:1.1rem 1.25rem" id="dday-checklist">
+      <legend class="cheat-title" style="color:var(--gold);padding:0 8px;font-size:13px">âœ… Your D-Day Checklist</legend>
+      <div id="checklist-items">
+        <label class="box-item" style="cursor:pointer;display:flex;align-items:center;gap:8px;padding:6px 0"><input type="checkbox" class="checklist-cb"> Read all 5 module questions</label>
+        <label class="box-item" style="cursor:pointer;display:flex;align-items:center;gap:8px;padding:6px 0"><input type="checkbox" class="checklist-cb"> Practice intro in mirror 5Ã—</label>
+        <label class="box-item" style="cursor:pointer;display:flex;align-items:center;gap:8px;padding:6px 0"><input type="checkbox" class="checklist-cb"> Memorize Cheat Sheet facts</label>
+        <label class="box-item" style="cursor:pointer;display:flex;align-items:center;gap:8px;padding:6px 0"><input type="checkbox" class="checklist-cb"> Prepare outfit &amp; polish shoes</label>
+        <label class="box-item" style="cursor:pointer;display:flex;align-items:center;gap:8px;padding:6px 0"><input type="checkbox" class="checklist-cb"> Sleep 7+ hours</label>
+        <label class="box-item" style="cursor:pointer;display:flex;align-items:center;gap:8px;padding:6px 0"><input type="checkbox" class="checklist-cb"> Morning: re-read Cheat Sheet</label>
+        <label class="box-item" style="cursor:pointer;display:flex;align-items:center;gap:8px;padding:6px 0"><input type="checkbox" class="checklist-cb"> 3 deep breaths before entering</label>
+      </div>
+    </fieldset>
+    <div class="model-answer" style="border-left-color:var(--gold);padding:1.25rem 1.5rem;border-radius:0 14px 14px 0;margin-bottom:2rem">
+      <p><strong style="font-size:15px;color:var(--gold-l)">A final word â€” from one who believes in you ðŸŽ“</strong></p>
+      <p>You are preparing tonight â€” that alone puts you ahead of the majority who walk in hoping. Hope is not a strategy. <strong>Preparation is.</strong></p>
+      <p>Balochistan needs officers who come from its soil and understand its people. The panel sitting in front of you knows this too. Walk in not just as a candidate â€” walk in as someone who <strong>belongs in that chair, who has earned it, and who will use it to serve.</strong></p>
+      <p>Know your introduction. Know your subject. Know your history. Know your Islam. Know your current affairs. And above all â€” <strong>know why you want this.</strong> When the why is clear, every answer becomes confident.</p>
+      <p style="margin-bottom:0">"The post is yours to lose. Don't lose it." <strong style="color:var(--gold)">Go get it. ðŸ†</strong></p>
+    </div>
+
+    <!-- SIGNATURE FOOTER -->
+    <div class="app-footer">
+      <span class="chachar-sig">â€” Created by Mr. CHACHAR â€”</span>
+      <p>with <em>sincerity and faithfulness</em> for the Aspirants of Balochistan ðŸŒ¹</p>
+      <p style="margin-top:6px;font-size:11px;color:var(--text3)">
+        Free for every son and daughter of Balochistan preparing for BPSC &amp; competitive exams.<br>
+        Your success is our purpose. Your service to Balochistan is our reward.
+      </p>
+    </div>
+  </div>
+
+  </div><!-- end .content -->
+</div><!-- end #app -->
+<button class="scroll-top" id="scroll-top">â†‘</button>
+<script src="app.js"></script>
+</body>
+</html>

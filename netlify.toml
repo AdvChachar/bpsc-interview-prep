@@ -1,6 +1,6 @@
 [build]
   functions = "netlify/functions"
-  publish = "."
+  publish = "src"
 
 [[redirects]]
   from = "/api/mistral"
@@ -9,5 +9,5 @@
 
 [[redirects]]
   from = "/*"
-  to = "/BPSC_Interview.html"
+  to = "/index.html"
   status = 200
