@@ -6,7 +6,7 @@
 <title>BPSC Interview Prep | Mr. Chachar — For Aspirants of Balochistan</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 :root{
   --gold:#c9a84c;--gold-l:#e8c96a;--gold-d:#a07830;
@@ -818,7 +818,7 @@ let userProfile = {};
 let authMode = 'login';
 let currentUser = null;
 
-const supabase = createClient('https://dahuobhikjudonbwoagp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhaHVvYmhpa2p1ZG9uYndvYWdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDQ2NTQsImV4cCI6MjA5NTM4MDY1NH0.SAwnUA7oTO4lcd-HaE4jXJxeKDvNKu8hkVh9ZHI8YyQ');
+const supabase = window.supabase.createClient('https://dahuobhikjudonbwoagp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhaHVvYmhpa2p1ZG9uYndvYWdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDQ2NTQsImV4cCI6MjA5NTM4MDY1NH0.SAwnUA7oTO4lcd-HaE4jXJxeKDvNKu8hkVh9ZHI8YyQ');
 
 // ═══════════════════════════
 //  AUTH FUNCTIONS

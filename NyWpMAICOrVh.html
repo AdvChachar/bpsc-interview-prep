@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BPSC Admin Panel — Mr. Chachar</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 :root{--gold:#c9a84c;--gold-l:#e8c96a;--navy:#0b1437;--navy4:#1a2878;--em:#1a6b3c;--dark:#070c20;--dark2:#0a1028;--dark3:#0f1535;--dark4:#161e40;--border:rgba(201,168,76,0.1);--border2:rgba(201,168,76,0.2);--text:#f0eeee;--text2:#b8b8d0;--text3:#8080a0;--card:#0d1330;--danger:#ef4444;--em-l:#27a05a}
 *{box-sizing:border-box;margin:0;padding:0}body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);min-height:100vh}
@@ -116,7 +116,7 @@ tr:last-child td{border-bottom:none}
 </div></div>
 
 <script>
-const supabase = createClient('https://dahuobhikjudonbwoagp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhaHVvYmhpa2p1ZG9uYndvYWdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDQ2NTQsImV4cCI6MjA5NTM4MDY1NH0.SAwnUA7oTO4lcd-HaE4jXJxeKDvNKu8hkVh9ZHI8YyQ');
+const supabase = window.supabase.createClient('https://dahuobhikjudonbwoagp.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhaHVvYmhpa2p1ZG9uYndvYWdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDQ2NTQsImV4cCI6MjA5NTM4MDY1NH0.SAwnUA7oTO4lcd-HaE4jXJxeKDvNKu8hkVh9ZHI8YyQ');
 
 let allProfiles = [];
 let allMockResults = [];
