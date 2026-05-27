@@ -3,7 +3,7 @@
   publish = "src"
 
 [[redirects]]
-  from = "/api/mistral"
+  from = "/api/gemini"
   to = "/.netlify/functions/proxy"
   status = 200
 

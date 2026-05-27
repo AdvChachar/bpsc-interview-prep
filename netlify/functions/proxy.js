@@ -1,37 +1,37 @@
-const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
-  if (!MISTRAL_API_KEY) {
-    return { statusCode: 500, body: JSON.stringify({ error: 'MISTRAL_API_KEY not configured' }) };
+  if (!GEMINI_API_KEY) {
+    return { statusCode: 500, body: JSON.stringify({ error: 'GEMINI_API_KEY not configured' }) };
   }
 
   try {
     const { system, user, maxTokens } = JSON.parse(event.body);
 
-    const res = await fetch('https://api.mistral.ai/v1/chat/completions', {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+    const res = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + MISTRAL_API_KEY
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'mistral-large-latest',
-        max_tokens: maxTokens || 1200,
-        messages: [
-          { role: 'system', content: system },
-          { role: 'user', content: user }
-        ]
+        contents: [{
+          parts: [
+            { text: system + '\n\n' + user }
+          ]
+        }],
+        generationConfig: {
+          maxOutputTokens: maxTokens || 1200,
+          temperature: 0.7
+        }
       })
     });
 
     const data = await res.json();
-    const content = (data.choices && data.choices[0] && data.choices[0].message)
-      ? data.choices[0].message.content
-      : '';
+    const content = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
     return {
       statusCode: 200,

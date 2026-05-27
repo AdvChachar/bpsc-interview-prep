@@ -39,6 +39,9 @@
       <div id="auth-loading" class="auth-loading">Please wait...</div>
     </div>
   </div>
+  <div style="text-align:center;margin-bottom:1rem">
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle day/night mode" style="display:inline-flex">🌙</button>
+  </div>
   <div class="auth-footer">
     <span class="chachar" style="font-family:'Playfair Display',serif;font-size:13px;color:var(--gold);font-weight:700">— Created by Mr. CHACHAR —</span><br>
     <div class="auth-footer-links">
@@ -98,13 +101,14 @@
 
 <!-- NAV USER — always visible when logged in (outside #app so it shows on landing page too) -->
 <div class="top-nav" id="top-nav" style="display:none">
-  <div class="nav-inner">
-    <div class="nav-logo">BPSC Prep · Mr. Chachar</div>
-    <div class="nav-user" id="nav-user">
-      <span class="nav-user-email" id="nav-email"></span>
-      <button class="nav-user-btn" onclick="handleSignOut()">Sign out</button>
+    <div class="nav-inner">
+      <div class="nav-logo">BPSC Prep · Mr. Chachar</div>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle day/night mode" style="margin-left:auto">🌙</button>
+      <div class="nav-user" id="nav-user">
+        <span class="nav-user-email" id="nav-email"></span>
+        <button class="nav-user-btn" onclick="handleSignOut()">Sign out</button>
+      </div>
     </div>
-  </div>
 </div>
 
 <!-- APP SHELL -->
@@ -112,6 +116,7 @@
   <div class="top-nav">
     <div class="nav-inner">
       <div class="nav-logo">BPSC Prep · Mr. Chachar</div>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle day/night mode" style="margin-left:auto">🌙</button>
       <div class="nav-tabs">
         <button class="nav-tab active" data-section="s1">01·Intro</button>
         <button class="nav-tab" data-section="s2">02·Degree</button>

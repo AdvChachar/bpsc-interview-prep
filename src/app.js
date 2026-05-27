@@ -425,10 +425,10 @@ function updateProgress(sec) {
 }
 
 // ═══════════════════════════
-//  MISTRAL AI API HELPER
+//  GEMINI AI API HELPER
 // ═══════════════════════════
-async function callMistral(systemPrompt, userMessage, maxTokens = 1200) {
-  let url = '/api/mistral';
+async function callGemini(systemPrompt, userMessage, maxTokens = 1200) {
+  let url = '/api/gemini';
   if (location.hostname === '127.0.0.1' || location.hostname === 'localhost') {
     url = '/.netlify/functions/proxy';
   }
@@ -479,7 +479,8 @@ async function generateIntro() {
   loader.classList.add('show');
 
   const system = `You are an expert BPSC (Balochistan Public Service Commission) interview coach in Pakistan. 
-Generate personalized interview content for a BPSC candidate. Be warm, motivational, and highly specific to their background. 
+You help candidates craft their own authentic answers — not robotic AI text. Your output must sound like a real, smart candidate speaking naturally, not like a ChatGPT essay.
+Use simple, confident, human language. Short sentences. Occasional natural pauses. No flowery or overwritten prose.
 Return ONLY a valid JSON object, no markdown, no extra text.`;
 
   const user = `Candidate:
@@ -498,7 +499,7 @@ Return this exact JSON:
 }`;
 
   try {
-    const raw    = await callMistral(system, user, 1200);
+    const raw    = await callGemini(system, user, 1200);
     clearInterval(lt);
     loader.classList.remove('show');
 
@@ -581,6 +582,7 @@ async function generateDegreeQuestions() {
 
   const system = `You are a senior BPSC (Balochistan Public Service Commission) interview panel examiner in Pakistan.
 Generate realistic degree-specific interview questions a BPSC panel would ask this candidate.
+Model answers must sound like a real capable candidate speaking naturally — not robotic AI text. Short, confident, human sentences. Avoid flowery language.
 Return ONLY a valid JSON array, no markdown, no extra text.`;
 
   const user = `Degree: ${degree} | Major: ${major||'general'} | University: ${uni||'not specified'}
@@ -590,7 +592,7 @@ Generate exactly 8 interview questions as a JSON array:
 [{"num":1,"category":"category label","question":"Question in quotes as panel would ask it","model_answer":"Complete model answer 4-6 sentences with specific concepts, definitions, examples from their field","pro_tip":"One specific tip for this question type"}]`;
 
   try {
-    const raw = await callMistral(system, user, 1200);
+    const raw = await callGemini(system, user, 1200);
     clearInterval(lt);
     loader.classList.remove('show');
 
@@ -801,7 +803,7 @@ Return ONLY this JSON (no other text):
 {"score":<1-100>,"stars":<1-5>,"label":"<max 8 words>","feedback":"<2-3 sentences: what was good + what is missing + one specific fact or date they should add>"}`;
 
   try {
-    const raw    = await callMistral('You are a BPSC interview evaluator. Return only valid JSON.', evalPrompt, 400);
+    const raw    = await callGemini('You are a BPSC interview evaluator. Return only valid JSON.', evalPrompt, 400);
     clearInterval(lt);
     loadEl.classList.remove('show');
     const result = safeParseJSON(raw, {
@@ -939,6 +941,32 @@ function initAria() {
   document.getElementById('degree-loading')?.setAttribute('aria-live', 'polite');
 }
 document.addEventListener('DOMContentLoaded', initAria);
+
+// ═══════════════════════════
+//  DAY/NIGHT THEME TOGGLE
+// ═══════════════════════════
+function toggleTheme() {
+  const html = document.documentElement;
+  const isLight = html.getAttribute('data-theme') === 'light';
+  html.setAttribute('data-theme', isLight ? '' : 'light');
+  localStorage.setItem('bpsc_theme', isLight ? '' : 'light');
+  document.querySelectorAll('.theme-toggle').forEach(b => {
+    b.textContent = isLight ? '🌙' : '☀️';
+  });
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('bpsc_theme');
+  const html = document.documentElement;
+  if (saved === 'light') {
+    html.setAttribute('data-theme', 'light');
+    document.querySelectorAll('.theme-toggle').forEach(b => b.textContent = '☀️');
+  } else {
+    html.setAttribute('data-theme', '');
+    document.querySelectorAll('.theme-toggle').forEach(b => b.textContent = '🌙');
+  }
+}
+document.addEventListener('DOMContentLoaded', initTheme);
 
 // ═══════════════════════════
 //  EVENT DELEGATION (replaces inline onclick)
